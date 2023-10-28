@@ -16,7 +16,7 @@ BUT... this is no regular game of checkers... this is Doge Checkers. In addition
 - Google Drawings
 
 # Getting started
-*insert link here*
+pseudocode.md
 
 Rules:
 - Player 1 and 2 take turns moving their pieces
