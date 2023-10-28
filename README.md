@@ -15,5 +15,12 @@ BUT... this is no regular game of checkers... this is Doge Checkers. In addition
 - Javascript
 - Google Drawings
 
+# Getting started
+*insert link here*
 
-- 
+Rules:
+- Player 1 and 2 take turns moving their pieces
+- Players can only move pieces forward and diagonally, on the dark squares
+- Players can move their pieces over their opponents pieces to capture them and permanently remove them from play
+- If a player is able to move one of their pieces to the opposite end of their board, that piece becomes a king and is now able to move backwards
+- Once a player is able to capture all of their opponent's pieces, the game is over and the player with pieces remaining on the board is the inner
