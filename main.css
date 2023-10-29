@@ -18,3 +18,8 @@ h1{
 body{
     background-image: url(background-image/chewy\ background.jpg);
 }
+
+.playTile{
+    box-sizing: border-box;
+    border: 1px solid red;
+}
