@@ -1,10 +1,17 @@
-const board;
-The 8x8 board contains 8 nested arrays. There are only 2 different values:
-- one number signifies where a piece can be moved
-- the other number is where a piece cannot be moved
+# Checkers
 
-let player1Choice;
-let player2Choice;
+# Wireframes
+ ![AltText](planning/wireframe1.jpg)
+
+ ![AltText](planning/wireframe2.jpg)
+
+ ![AltText](planning/wireframe3.jpg)
+
+
+const board;
+The 8x8 board is an array of 64 objects. Half of those objects are undefined -> chess pieces cannot move there
+
+let player;
 let piecesP1;
 let piecesP2;
 
@@ -12,8 +19,6 @@ init(){
   render()
 }
 
-function init();
-  player1Choice = null
-  player2Choice = null
+function init(); -> initial game state
 
-function render()
+function render() ->
