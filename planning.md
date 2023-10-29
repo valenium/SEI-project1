@@ -10,6 +10,7 @@ let piecesP2;
 
 init(){
   render()
+}
 
 function init();
   player1Choice = null
