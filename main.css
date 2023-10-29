@@ -11,15 +11,43 @@ h1{
     text-align: center;
     background-color: #846934;
     padding: 1.5rem;
-    margin: 0;
+    margin: 0 0 1rem 0;
     color: white;
 }
 
 body{
     background-image: url(background-image/chewy\ background.jpg);
+    justify-content: center;
 }
 
-.playTile{
-    box-sizing: border-box;
-    border: 1px solid red;
+#board{
+    display: grid;
+    justify-content: space-around;
+    justify-items: center;
+    align-content: space-around;
+    flex-wrap: center;
+    border: 1rem solid red;
+    background-color: white;
+    /* margin: 0 1rem 0 10rem; */
+    height: 550px;
+    width: 550px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.play-tile{
+    display: grid;
+    width: 70px;
+    height: 70px;
+    border: 2px solid black;
+    background-color: #846934;
+    margin: -1px;
+}
+
+.invalid-tile{
+    width: 70px;
+    height: 70px;
+    border: 2px solid black;
+    background-color: #FFFFFF;
+    margin: -1px;
 }
