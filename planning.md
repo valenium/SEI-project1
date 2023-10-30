@@ -39,13 +39,16 @@ const p2KingEl = document.querySelector
 
 **Event listeners**
 p1PieceEl on click move
+  - Active upon render
+  - Becomes active when P2 move concludes
   - Target piece to be moved 
   - Click on square piece is to be moved to
   - Function to check if move is valid/invalid
   - Function to check if transform to king
 
 p2PieceEl on click move
-  - Target piece to be moved 
+  - Becomes active when P1 concludes
+  - Target piece to be moved
   - Click on square piece is to be moved to
   - Function to check if move is valid/invalid
   - Function to check if transform to king
@@ -64,9 +67,18 @@ p2KingEl on click move
 
 Init -> initial game state, calls render
 Render -> 
-regularValidMove ->
-  - If piece is on an even array, can move piece to a tile of where the value has a difference of 3 or 4 -> move piece
-  - Else if piece is on an odd array, can move piece to a tile of where the value has a difference of 4 or 5 -> move piece
+regularValidMoveP1 ->
+  - for loop of board variable
+  - If piece is on an even array, can move piece to a tile of where the value of the current tile plus the tile it wants to move to has a difference of 3 or 4 -> move piece
+  - Else if piece is on an odd array, can move piece to a tile of where the value of the current tile plus the tile it wants to move to has a difference of 4 or 5 -> move piece
+  - Else if piece is on any array and moves to a tile of where the value has a difference of 7 or 9 and opposing player piece is on valid move, remove piece on valid move and move piece
+
+  - If piece placed on null value -> invalid move
+
+  regularValidMoveP2 ->
+  - for loop of board variable
+  - If piece is on an even array, can move piece to a tile of where the value of the current tile minus the tile it wants to move to has a difference of 3 or 4 -> move piece
+ - Else if piece is on an odd array, can move piece to a tile of where the value of the current tile minus the tile it wants to move to has a difference of 4 or 5 -> move piece
   - Else if piece is on any array and moves to a tile of where the value has a difference of 7 or 9 and opposing player piece is on valid move, remove piece on valid move and move piece
 
   - If piece placed on null value -> invalid move
@@ -75,10 +87,16 @@ playerTurn -> text of game-stat box on right to indicate which player is active
 
 transformKing ->
   - If piece placed on opposite array, transform to king
+  - Change style of piece
 
 kingValidMove ->
+- If piece is on an even array, can move piece to a tile of where the value of the current tile plus or minus the tile it wants to move to has a difference of 3 or 4 -> move piece
+ - Else if piece is on an odd array, can move piece to a tile of where the value of the current tile plus or minus the tile it wants to move to has a difference of 4 or 5 -> move piece
+  - Else if piece is on any array and moves to a tile of where the value has a difference of plus or minus 7 or 9 and opposing player piece is on valid move, remove piece on valid move and move piece
 
+  - If piece placed on null value -> invalid move
 
 endGame ->
   - If all p1Pieces OR p2Pieces are removed OR p1/p2 cannot make a valid move -> end game
+    - Reset game after 5 seconds
   - Else, game continues
