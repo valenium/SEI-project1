@@ -91,7 +91,7 @@ main{
     height: 50px;
     border-radius: 50%;
     border: 2px solid red;
-    background-image: url(board-images/white-tile.jpg);
+    background-image: url(board-images/chewy-piece1.jpg);
     /* justify-self: center; */
     margin: 0;
 }
