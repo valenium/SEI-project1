@@ -20,13 +20,24 @@ body{
     justify-content: center;
 }
 
+main{
+    display: flex;
+    justify-content: space-between;
+}
+
+.chewy{
+    background-color: white;
+    height: 100%;
+    width: 30%;
+}
+
 #board{
     display: grid;
     justify-content: space-around;
     justify-items: center;
     align-content: space-around;
     flex-wrap: center;
-    border: 1rem solid red;
+    border: 1rem solid black;
     background-color: white;
     /* margin: 0 1rem 0 10rem; */
     height: 550px;
@@ -37,11 +48,13 @@ body{
 
 .play-tile{
     display: grid;
+    /* place-items: center; */
     width: 70px;
     height: 70px;
     border: 2px solid black;
     background-color: #846934;
     margin: -1px;
+    place-items: center;
 }
 
 .invalid-tile{
@@ -50,4 +63,19 @@ body{
     border: 2px solid black;
     background-color: #FFFFFF;
     margin: -1px;
+}
+
+.p1-piece{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid red;
+    justify-self: center;
+}
+
+.p2-piece{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid blue;
 }
