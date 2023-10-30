@@ -31,6 +31,10 @@ main{
     width: 30%;
 }
 
+.speech-bubble{
+    width: 10$;
+}
+
 #board{
     display: grid;
     justify-content: space-around;
