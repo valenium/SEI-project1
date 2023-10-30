@@ -9,6 +9,7 @@
 
 # Pseudocode
 **Constants**
+
 const board =[
 {1,null,2,null,3,null,4,null}
 {null,5,null,6,null,7,null,8}
@@ -19,12 +20,13 @@ const board =[
 {25,null,26,null,27,null,28,null}
 {null,29,null,30,null,31,null,32}
 ]
+const chewyPhrases;
 
 The 8x8 board is an array of 64 objects. Half of those objects are undefined -> chess pieces cannot move there
 
 **State variables**
 let currentPlayer;
-let chewyPhrases;
+
 
 
 **Cached elements**
