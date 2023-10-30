@@ -90,7 +90,7 @@ main{
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    border: 2px solid red;
+    border: 1px solid black;
     background-image: url(board-images/chewy-piece1.jpg);
     /* justify-self: center; */
     margin: 0;
@@ -100,14 +100,16 @@ main{
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    /* border: 2px solid blue; */
-    background-color: blue;
+    border: 2px solid white;
+    background-image: url(board-images/chewy-piece2.jpg);
     margin: 0;
 }
 
 .dialogue-box{
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     border: 2px solid red;
     width: 18rem;
     height: 99%;
@@ -121,9 +123,24 @@ main{
 h2{
     font-size: 40px;
     font-family: 'Anton', sans-serif;
-    text-wrap: wrap;
+    /* text-wrap: wrap; */
+    align-self: center;
+}
+
+h2.player1-prompt{
     margin: 1rem -1rem 2rem -1rem;
     padding: 20px 0 30px 0;
-    align-self: center;
     border-bottom: 2px solid black;
+}
+
+h2.player2-prompt{
+    margin: 2rem -1rem 1rem -1rem;
+    padding: 30px 0 20px 0;
+    border-top: 2px solid black;
+}
+
+.chewy-dialogue{
+    align-self: center;
+    font-family: Calibri;
+    font-size: 20px;
 }
