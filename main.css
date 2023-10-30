@@ -22,11 +22,12 @@ body{
 
 main{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    /* align-items: center; */
     /* align-items: center; */
     /* padding: 0; */
     margin: 0 5rem 0 8rem;
-    position: fixed;
+    /* position: fixed; */
 }
 
 .chewy{
@@ -40,12 +41,16 @@ main{
     /* margin: 0 0 0 0; */
 }
 
-.speech-bubble{
-    height: 100%;
-    margin: 0 0 0 -4rem;
+.chewy-text{
+    box-sizing: border-box;
+    width: 80%;
+    font-size: 40px;
 }
 
-
+/* .speech-bubble{
+    height: 100%;
+    margin: 0 0 0 -4rem;
+} */
 
 #board{
     display: grid;
@@ -69,8 +74,8 @@ main{
     border: 2px solid black;
     background-color: #846934;
     margin: -1px;
+    /* padding-bottom: px; */
     place-items: center;
-    align-items: center;
 }
 
 .invalid-tile{
@@ -86,28 +91,39 @@ main{
     height: 50px;
     border-radius: 50%;
     border: 2px solid red;
+    background-image: url(board-images/white-tile.jpg);
     /* justify-self: center; */
+    margin: 0;
 }
 
 .p2-piece{
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    border: 2px solid blue;
+    /* border: 2px solid blue; */
+    background-color: blue;
+    margin: 0;
 }
 
 .dialogue-box{
+    display: flex;
+    flex-direction: column;
     border: 2px solid red;
-    width: 100%;
-    height: 20%;
+    width: 18rem;
+    height: 99%;
     background-color: white;
     border-radius: 15px;
     border: 2px solid black;
+    margin-left: 1rem;
+    /* align-items: center; */
 }
 
 h2{
     font-size: 40px;
     font-family: 'Anton', sans-serif;
     text-wrap: wrap;
-    margin: 1rem;
+    margin: 1rem -1rem 2rem -1rem;
+    padding: 20px 0 30px 0;
+    align-self: center;
+    border-bottom: 2px solid black;
 }
