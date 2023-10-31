@@ -18,7 +18,7 @@ const chewyPhrases = ['zzz', '2/10', 'am bored', 'can we go home', 'mediocre at 
 
 /*----- state variables -----*/
 let turn;
-let currentPiece;
+let currentPiece = null;
 let p1Turn;
 let p2Turn;
 
@@ -43,6 +43,7 @@ tiles.forEach((tile,index) => {
 
 // Play pieces
 const p1PieceEl = document.querySelectorAll('#p1-piece')
+p1PieceEl
 const p2PieceEl = document.querySelectorAll('#p2-piece')
 
 // Dialogue/stat box
@@ -61,63 +62,83 @@ console.log(p1ScoreEl.innerText)
 // Player 1 clicks on piece to move
 p1PieceEl.forEach(function(move){
     move.addEventListener('click', handlePieceClick)
+    move.addEventListener('click', handlePieceMove)
 })
 p1Turn= true
 function handlePieceClick(e){
     e.preventDefault()
-    if((p1Turn === true && e.target.innerHTML === p2PieceEl)||(p2Turn === true && e.target.innerHTML === p1PieceEl )){
-        chewyTextEl.innerText('not your turn!')
+    let piece = e.target
+    if((p1Turn === true && e.target === p2PieceEl)||(p2Turn === true && e.target.innerHTML === p1PieceEl )){
+        chewyTextEl.innerText = 'not your turn!'
         return;
     }
-    e.target.style.color = 'white'
+    if (currentPiece === piece){
+        piece.style.opacity = '1'
+        currentpiece = null
+    }
+    if (currentPiece){
+        currentPiece.style.opacity = '1'
+    }
+    currentPiece = piece
+    e.target.style.opacity = '0.3'
+}
+
+function handlePieceMove(e){
+    e.preventDefault()
+    // if(){
+    //     chewyTextEl.innerText('not your turn!')
+    //     return;
+    // }
+    // e.currentTarget.style.color = 'white'
+
 }
 
 /*----- functions -----*/
 
-init()
+// init()
 
-function init(){
-    p1ScoreEl.innerText = p1PieceEl.length
-    p2ScoreEl.innerText = p2PieceEl.length
-    chewyTextEl.textContent = chewyPhrases[0]
-    p1Turn = true
-    // render()
-}
+// function init(){
+//     p1ScoreEl.innerText = p1PieceEl.length
+//     p2ScoreEl.innerText = p2PieceEl.length
+//     chewyTextEl.textContent = chewyPhrases[0]
+//     p1Turn = true
+//     // render()
+// }
 
-function countPieces(){
-    for(let i=0; i<p1PieceEl.length-1; i++){
-        console.log(p1PieceEl[i])
-    }
-    for(let j=0; j<p2PieceEl.length-1; j++){
-        console.log(p2PieceEl[j])
-    }
-}
-countPieces()
-console.dir(p1PieceEl)
+// function countPieces(){
+//     for(let i=0; i<p1PieceEl.length-1; i++){
+//         console.log(p1PieceEl[i])
+//     }
+//     for(let j=0; j<p2PieceEl.length-1; j++){
+//         console.log(p2PieceEl[j])
+//     }
+// }
+// countPieces()
+// console.dir(p1PieceEl)
 
-function chewyDialogue(){
-    chewyTextEl.textContent = chewyPhrases[(Math.floor(Math.random()*chewyPhrases.length))]
-}
+// function chewyDialogue(){
+//     chewyTextEl.textContent = chewyPhrases[(Math.floor(Math.random()*chewyPhrases.length))]
+// }
 
-function render(){
-    trn
-}
+// function render(){
+//     trn
+// }
 
-function runGame(){
-    if (continueGame()){
+// function runGame(){
+//     if (continueGame()){
         
-    }else{
-        endGame()
-    }
-}
+//     }else{
+//         endGame()
+//     }
+// }
 
-function changeTurn(){}
+// function changeTurn(){}
 
-function continueGame(){
-    let keepRunning = true
+// function continueGame(){
+//     let keepRunning = true
 
-}
+// }
 
-function endGame(){
+// function endGame(){
 
-}
+// }
