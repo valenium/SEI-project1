@@ -108,9 +108,9 @@ main{
     margin: 0;
 }
 
-p:hover{
+/* p:hover{
     opacity: 0.3;
-}
+} */
 
 .dialogue-box{
     display: flex;

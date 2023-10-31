@@ -18,7 +18,9 @@ const chewyPhrases = ['zzz', '2/10', 'am bored', 'can we go home', 'mediocre at 
 
 /*----- state variables -----*/
 let turn;
+let tileOfPiece = null;
 let currentPiece = null;
+let currentTile = null;
 let p1Turn;
 let p2Turn;
 
@@ -28,13 +30,19 @@ let p2Turn;
 
 // Game board tiles
 const tiles = document.querySelectorAll('#tile')
-console.dir(tiles)
-tiles.forEach((tile,index) => {
-    const row = Math.floor(index/8)
-    const col = index%8
+// console.dir(tiles)
+for (let i=0; i<tiles.length; i++){
+    const tile = tiles[i]
+    const row = Math.floor(i/8)
+    const col = (i%8)
     tile.dataset.value = board[row][col]
-})
-// console.log(tiles[1].dataset.value)
+}
+// tiles.forEach((tile,index) => {
+//     const row = Math.floor(index/8)
+//     const col = index%8 
+//     tile.dataset.value = board[row][col]
+// })
+// console.log(tiles[0].dataset.value)
 
 // console.log(tiles)
 
@@ -43,7 +51,6 @@ tiles.forEach((tile,index) => {
 
 // Play pieces
 const p1PieceEl = document.querySelectorAll('#p1-piece')
-p1PieceEl
 const p2PieceEl = document.querySelectorAll('#p2-piece')
 
 // Dialogue/stat box
@@ -62,15 +69,28 @@ console.log(p1ScoreEl.innerText)
 // Player 1 clicks on piece to move
 p1PieceEl.forEach(function(move){
     move.addEventListener('click', handlePieceClick)
-    move.addEventListener('click', handlePieceMove)
+    // move.addEventListener('click', handlePieceMove)
 })
-p1Turn= true
+
+p2PieceEl.forEach(function(move){
+    move.addEventListener('click', handlePieceClick)
+    // move.addEventListener('click', handlePieceMove)
+})
+
+tiles.forEach(function(place){
+    place.addEventListener('click', handleTileClick)
+})
+turn = true
+
+// To select piece player wants to move
 function handlePieceClick(e){
     e.preventDefault()
     let piece = e.target
-    if((p1Turn === true && e.target === p2PieceEl)||(p2Turn === true && e.target.innerHTML === p1PieceEl )){
-        chewyTextEl.innerText = 'not your turn!'
-        return;
+    tileOfPiece = piece.parentElement
+    if((turn === true && piece.p2PieceEl)||(turn === false && piece.p1PieceEl )){
+        chewyTextEl.textContent = 'not your turn! >:('
+        piece.style.opacity = '1'
+        currentpiece = null
     }
     if (currentPiece === piece){
         piece.style.opacity = '1'
@@ -80,17 +100,23 @@ function handlePieceClick(e){
         currentPiece.style.opacity = '1'
     }
     currentPiece = piece
-    e.target.style.opacity = '0.3'
+    piece.style.opacity = '0.3'
+    console.log(tileOfPiece)
 }
 
-function handlePieceMove(e){
+// To move selected piece to tile
+function handleTileClick(e){
     e.preventDefault()
-    // if(){
-    //     chewyTextEl.innerText('not your turn!')
-    //     return;
-    // }
-    // e.currentTarget.style.color = 'white'
-
+    let clickedTile = e.target
+    // tileOfPiece = currentPiece.parentNode
+    const tileNumber = clickedTile.dataset.value
+    if(tileNumber === null){
+        chewyTextEl.innerText = 'invalid move'
+    }
+    // if (clickedTile === clickedTile)
+    clickedTile.style.opacity = '0.3'
+    console.log(clickedTile.dataset.value)
+    
 }
 
 /*----- functions -----*/
@@ -104,6 +130,22 @@ function handlePieceMove(e){
 //     p1Turn = true
 //     // render()
 // }
+
+function initEventHandler(){
+    p1PieceEl = removeEventListener()
+}
+
+function playerTurn(){
+    if (turn === true){
+        for (let i=0;i<p1PieceEl.length; i++){
+            p1PieceEl[i].removeEventListener('click', handlePieceClick)
+        }
+        }else{
+            for (let i=0;i<p2PieceEl.length; i++){
+                p2PieceEl[i].removeEventListener('click', handlePieceClick)
+        }
+    }
+}
 
 // function countPieces(){
 //     for(let i=0; i<p1PieceEl.length-1; i++){
