@@ -1,4 +1,4 @@
-<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Raleway:wght@300&display=swap" rel="stylesheet">
 
 *{
     box-sizing: border-box;
@@ -136,15 +136,31 @@ h2{
 }
 
 h2#player1-prompt{
-    margin: 1rem -1rem 2rem -1rem;
-    padding: 20px 0 30px 0;
+    margin: 1rem -1rem 0 -1rem;
+    padding: 20px 0 0 0;
+    font-family: 'Raleway', sans-serif;
+}
+
+.p1-score{
+    margin: 0 -1rem 2rem -1rem;
+    padding: 5px 35% 10px 35%;
     border-bottom: 2px solid black;
+    font-size: 20px;
+    font-family: 'Raleway', sans-serif;
 }
 
 h2#player2-prompt{
-    margin: 2rem -1rem 1rem -1rem;
-    padding: 30px 0 20px 0;
+    margin: 0 -1rem 1rem -1rem;
+    padding: 0 0 20px 0;
+    font-family: 'Raleway', sans-serif;
+}
+
+.p2-score{
+    margin: 2rem -1rem 0 -1rem;
+    padding: 10px 35% 5px 35%;
     border-top: 2px solid black;
+    font-size: 20px;
+    font-family: 'Raleway', sans-serif;
 }
 
 .chewy-dialogue{

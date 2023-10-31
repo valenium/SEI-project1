@@ -14,12 +14,13 @@ const board =[
 
 // console.log(board)
 
-const chewyPhrases = ['zzz', '2/10', 'am bored', 'can we go home', 'mediocre at best', 'k', 'feed me', 'wher r treats', 'kinda lame', 'bad', 'Y', 'congrats']
+const chewyPhrases = ['zzz', '2/10', 'am bored', 'can we go home', 'mediocre at best', 'k', 'feed me', 'wher r treats', 'kinda lame', 'bad', 'Y']
 
 /*----- state variables -----*/
 let turn;
-let p1Score;
-let p2Score;
+let currentPiece;
+let p1Turn;
+let p2Turn;
 
 /*----- cached elements  -----*/
 // const divActive = document.createElement('div')
@@ -33,6 +34,7 @@ tiles.forEach((tile,index) => {
     const col = index%8
     tile.dataset.value = board[row][col]
 })
+// console.log(tiles[1].dataset.value)
 
 // console.log(tiles)
 
@@ -41,13 +43,17 @@ tiles.forEach((tile,index) => {
 
 // Play pieces
 const p1PieceEl = document.querySelectorAll('#p1-piece')
-console.log(p1PieceEl)
 const p2PieceEl = document.querySelectorAll('#p2-piece')
-console.log(p2PieceEl)
 
 // Dialogue/stat box
-const chewyTextEl = document.querySelector('h4')
-console.log(chewyTextEl.innerText)
+const p1TextEl = document.querySelector('#player1-prompt')
+const p2TextEl = document.querySelector('#player2-prompt')
+const chewyTextEl = document.querySelector('#chewy-phrase')
+const p1ScoreEl = document.querySelector('#p1-score')
+const p2ScoreEl = document.querySelector('#p2-score')
+console.log(p1ScoreEl.innerText)
+
+// console.log(chewyTextEl.innerText)
 
 
 /*----- event listeners -----*/
@@ -56,32 +62,45 @@ console.log(chewyTextEl.innerText)
 p1PieceEl.forEach(function(move){
     move.addEventListener('click', handlePieceClick)
 })
-
-// function handlePieceClick(e){
-//     console.log(e.target.innerHTML)
-//     p1PieceEl.style.opacity = '0.3'
-//     for(let i=0; i<board.length; i++){
-//         (let j=0; j<board[i].length; j++)
-//     }
-// }
+p1Turn= true
+function handlePieceClick(e){
+    e.preventDefault()
+    if((p1Turn === true && e.target.innerHTML === p2PieceEl)||(p2Turn === true && e.target.innerHTML === p1PieceEl )){
+        chewyTextEl.innerText('not your turn!')
+        return;
+    }
+    e.target.style.color = 'white'
+}
 
 /*----- functions -----*/
 
 init()
 
 function init(){
-    p1Score = 12
-    p2Score = 12
-    // chewyTextEl.textContent = 'hello'
+    p1ScoreEl.innerText = p1PieceEl.length
+    p2ScoreEl.innerText = p2PieceEl.length
+    chewyTextEl.textContent = chewyPhrases[0]
+    p1Turn = true
     // render()
 }
 
-function chewyDialogue(){
+function countPieces(){
+    for(let i=0; i<p1PieceEl.length-1; i++){
+        console.log(p1PieceEl[i])
+    }
+    for(let j=0; j<p2PieceEl.length-1; j++){
+        console.log(p2PieceEl[j])
+    }
+}
+countPieces()
+console.dir(p1PieceEl)
 
+function chewyDialogue(){
+    chewyTextEl.textContent = chewyPhrases[(Math.floor(Math.random()*chewyPhrases.length))]
 }
 
 function render(){
-    
+    trn
 }
 
 function runGame(){
@@ -92,7 +111,10 @@ function runGame(){
     }
 }
 
+function changeTurn(){}
+
 function continueGame(){
+    let keepRunning = true
 
 }
 
