@@ -12,9 +12,11 @@ const board =[
     [null,29,null,30,null,31,null,32]
 ]
 
+// for (let i)
+
 // console.log(board)
 
-const chewyPhrases = ['zzz', '2/10', 'am bored', 'can we go home', 'mediocre at best', 'k', 'feed me', 'wher r treats', 'kinda lame', 'bad', 'Y']
+const chewyPhrases = ['zzz', '2/10', 'am bored', 'can we go home', 'mediocre at best', 'k', 'feed me', 'wher r treats', '...', 'meh', 'Y', 'h3ck', 'am scared']
 
 /*----- state variables -----*/
 let turn;
@@ -23,6 +25,8 @@ let currentPiece = null;
 let currentTile = null;
 let p1Turn;
 let p2Turn;
+let row;
+let col;
 
 /*----- cached elements  -----*/
 // const divActive = document.createElement('div')
@@ -31,12 +35,13 @@ let p2Turn;
 // Game board tiles
 const tiles = document.querySelectorAll('#tile')
 // console.dir(tiles)
-for (let i=0; i<tiles.length; i++){
-    const tile = tiles[i]
-    const row = Math.floor(i/8)
-    const col = (i%8)
-    tile.dataset.value = board[row][col]
-}
+// for (let i=0; i<tiles.length; i++){
+//     const tile = tiles[i]
+//     row = Math.floor(i/8)
+//     col = (i%8)
+//     tile.dataset.value = board[row][col]
+// }
+// console.log(board[col][row])
 // tiles.forEach((tile,index) => {
 //     const row = Math.floor(index/8)
 //     const col = index%8 
@@ -80,43 +85,71 @@ p2PieceEl.forEach(function(move){
 tiles.forEach(function(place){
     place.addEventListener('click', handleTileClick)
 })
-turn = true
-
+turn = false
+console.dir(p2PieceEl)
 // To select piece player wants to move
 function handlePieceClick(e){
     e.preventDefault()
     let piece = e.target
     tileOfPiece = piece.parentElement
-    if((turn === true && piece.p2PieceEl)||(turn === false && piece.p1PieceEl )){
+    if((turn === true && piece.id === 'p2-piece')||(turn === false && piece.id === 'p1-piece')){
         chewyTextEl.textContent = 'not your turn! >:('
         piece.style.opacity = '1'
-        currentpiece = null
-    }
-    if (currentPiece === piece){
+        currentPiece = null
+        return
+        // console.log(currentPiece)
+    }else if (currentPiece === piece){
+        chewyTextEl.textContent = chewyPhrases[0]
         piece.style.opacity = '1'
-        currentpiece = null
-    }
-    if (currentPiece){
+        currentPiece = null
+    }else if (currentPiece){
+        chewyTextEl.textContent = chewyPhrases[0]
         currentPiece.style.opacity = '1'
-    }
+    } 
     currentPiece = piece
     piece.style.opacity = '0.3'
-    console.log(tileOfPiece)
+    // if (currentPiece === piece){
+    //     piece.style.opacity = '1'
+    //     currentpiece = null
+    // }
+    // if (currentPiece){
+    //     currentPiece.style.opacity = '1'
+    // }
+    
+    console.dir(tileOfPiece)
+    console.dir(currentPiece)
+    console.log(currentPiece.parentElement.dataset.value)
 }
 
 // To move selected piece to tile
 function handleTileClick(e){
     e.preventDefault()
-    let clickedTile = e.target
-    // tileOfPiece = currentPiece.parentNode
+    const clickedTile = e.target
     const tileNumber = clickedTile.dataset.value
+    let i;
+    let pieceOnTile = currentPiece.parentElement.dataset.value;
+    for (i=0; i<board.length; i++){
+        return i
+    }
+    // console.log(board[row])
+    // If select white tile -> invalid move
     if(tileNumber === null){
-        chewyTextEl.innerText = 'invalid move'
+        chewyTextEl.textContent = 'invalid move'
+        return;
+    }
+    if((turn === true && ((board[i] % 2 === 0 && (pieceOnTile-tileNumber >= -4 || pieceOnTile-tileNumber <= -3)) || (board[i] % 2 !== 0 && (pieceOnTile-tileNumber >= -5 || pieceOnTile-tileNumber <= -4)))) || (turn === false && ((board[i] % 2 === 0 && (pieceOnTile-tileNumber >= 3 || pieceOnTile-tileNumber <= 4)) || (board[i] % 2 !== 0 && (pieceOnTile-tileNumber >= 4 || pieceOnTile-tileNumber <= 5))))){
+        pieceOnTile = tileNumber
+    // } else if {
+
+    } else {
+        chewyTextEl.innerContent = 'invalid move'
+        return;
     }
     // if (clickedTile === clickedTile)
-    clickedTile.style.opacity = '0.3'
-    console.log(clickedTile.dataset.value)
-    
+    // clickedTile.style.opacity = '0.3'
+    // console.log(tileNumber)
+    // console.log(pieceOnTile)
+    // console.log
 }
 
 /*----- functions -----*/
@@ -127,7 +160,7 @@ function handleTileClick(e){
 //     p1ScoreEl.innerText = p1PieceEl.length
 //     p2ScoreEl.innerText = p2PieceEl.length
 //     chewyTextEl.textContent = chewyPhrases[0]
-//     p1Turn = true
+//     turn = true
 //     // render()
 // }
 
@@ -147,6 +180,10 @@ function playerTurn(){
     }
 }
 
+function eventListenerSequence(){
+
+}
+
 // function countPieces(){
 //     for(let i=0; i<p1PieceEl.length-1; i++){
 //         console.log(p1PieceEl[i])
@@ -158,10 +195,10 @@ function playerTurn(){
 // countPieces()
 // console.dir(p1PieceEl)
 
-// function chewyDialogue(){
-//     chewyTextEl.textContent = chewyPhrases[(Math.floor(Math.random()*chewyPhrases.length))]
-// }
-
+function chewyDialogue(){
+    chewyTextEl.textContent = chewyPhrases[(Math.floor(Math.random()*chewyPhrases.length))]
+}
+chewyDialogue()
 // function render(){
 //     trn
 // }
