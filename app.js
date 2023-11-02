@@ -153,13 +153,17 @@ function handleTileClick(e) {
     console.log("waiting for tile to be selected");
   } else {
     validMove();
+    if (clickedTile.firstElementChild.classList.contains("p1-piece") || clickedTile.firstElementChild.classList.contains("p2-piece")){
+        validMove()
+        chewyTextEl.textContent = 'invalid move'
+    }
     // if (p1ValidMove === false || p2ValidMove === false) {
     //   chewyTextEl.textContent = "invalid move";
     //   console.log("piece is on tile" + pieceOnTile);
     //   console.log("invalid move. clicked on tile " + tileNumber);
     //   // return
     // } else 
-    if (p1ValidMove === true || p2ValidMove === true) {
+    else if (p1ValidMove === true || p2ValidMove === true) {
       console.log("moved piece to" + pieceOnTile);
       if (currentPiece.classList.contains("p1-piece")) {
         currentPiece.removeAttribute('id');
@@ -302,14 +306,7 @@ function validMove() {
     } else {
       p1ValidMove = false;
     }
-  } else if
-    (turn === false){
-        if (clickedTile.firstElementChild.classList.contains("p2-piece") ||
-        clickedTile.firstElementChild.classList.contains("p1-piece")){
-            console.log("invalid move");
-            console.dir(tileOfPiece.firstElementChild);
-    
-    } else if 
+  } else if 
     ((pieceOnTile === "5" && tileNumber === "2") ||
     (pieceOnTile === "5" && tileNumber === "1") ||
     (pieceOnTile === "6" && tileNumber === "3") ||
@@ -406,4 +403,4 @@ function validMove() {
 
 // function endGame(){
 
-    }
+    
