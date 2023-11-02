@@ -38,23 +38,22 @@ let row;
 let col;
 let pieceOnTile;
 let tileNumber;
+let isEnemyPiece;
+let removeEnemyPiece;
 
 /*----- cached elements  -----*/
 
 // Game board tiles
 const tiles = document.querySelectorAll("#tile");
 
-// console.log(board[col][row])
-// tiles.forEach((tile,index) => {
-//     const row = Math.floor(index/8)
-//     const col = index%8
-//     tile.dataset.value = board[row][col]
-// })
-// console.log(tiles[0].dataset.value)
+tiles.forEach((tile, index) => {
+  const row = Math.floor(index / 8);
+  const col = index % 8;
+  tile.dataset.value = board[row][col];
+});
 
 // Play pieces
 let p1PieceEl = document.querySelectorAll(".p1-piece");
-console.dir(p1PieceEl);
 let p2PieceEl = document.querySelectorAll(".p2-piece");
 
 // Dialogue/stat box
@@ -70,22 +69,27 @@ const p2ScoreEl = document.querySelector("#p2-score");
 const p1AddHandlePieceEventListener = () =>
   p1PieceEl.forEach((move) => move.addEventListener("click", handlePieceClick));
 
+// Delete P1 handle piece click event
 const p1DltHandlePieceEventListener = () =>
   p1PieceEl.forEach((move) =>
     move.removeEventListener("click", handlePieceClick)
   );
 
+// Player 2 clicks on piece to move
 const p2AddHandlePieceEventListener = () =>
   p2PieceEl.forEach((move) => move.addEventListener("click", handlePieceClick));
 
+// Delete P2 handle piece click event
 const p2DltHandlePieceEventListener = () =>
   p2PieceEl.forEach((move) =>
     move.removeEventListener("click", handlePieceClick)
   );
 
+// Move piece to tile event
 const addTileEventListener = () =>
   tiles.forEach((place) => place.addEventListener("click", handleTileClick));
 
+// Delete piece to tile event
 const dltTileEventListener = () =>
   tiles.forEach((place) => place.removeEventListener("click", handleTileClick));
 
@@ -99,7 +103,8 @@ for (let i = 0; i < tiles.length; i++) {
 
 turn = true;
 p1AddHandlePieceEventListener();
-p2TextEl.style.opacity = '0.3'
+indicatePlayerTurn();
+
 // To select piece player wants to move
 function handlePieceClick(e) {
   e.preventDefault();
@@ -137,11 +142,10 @@ function handlePieceClick(e) {
     chewyTextEl.textContent = chewyPhrases[0];
     piece.style.opacity = "0.3";
     addTileEventListener();
+    console.log("current piece = " + currentPiece.parentElement.dataset.value);
   }
-  console.dir(tileOfPiece);
-  console.log(currentPiece);
-  console.log(currentPiece.parentElement.dataset.value);
 }
+
 // To move selected piece to tile
 function handleTileClick(e) {
   e.preventDefault();
@@ -150,57 +154,111 @@ function handleTileClick(e) {
   // stores the tile number of the piece that player has clicked
   pieceOnTile = currentPiece.parentElement.dataset.value;
   if (tileNumber === undefined) {
-    console.log("waiting for tile to be selected");
+    // console.log("waiting for tile to be selected");
   } else {
     validMove();
-    if (clickedTile.firstElementChild.classList.contains("p1-piece") || clickedTile.firstElementChild.classList.contains("p2-piece")){
-        validMove()
-        chewyTextEl.textContent = 'invalid move'
+    // checks if there is a piece currently on tile being moved to
+    if (
+      clickedTile.firstElementChild.classList.contains("p1-piece") ||
+      clickedTile.firstElementChild.classList.contains("p2-piece")
+    ) {
+      validMove();
+      chewyTextEl.textContent = "invalid move";
     }
-    // if (p1ValidMove === false || p2ValidMove === false) {
-    //   chewyTextEl.textContent = "invalid move";
-    //   console.log("piece is on tile" + pieceOnTile);
-    //   console.log("invalid move. clicked on tile " + tileNumber);
-    //   // return
-    // } else 
     else if (p1ValidMove === true || p2ValidMove === true) {
-      console.log("moved piece to" + pieceOnTile);
+      console.log("moved piece to " + tileNumber);
       if (currentPiece.classList.contains("p1-piece")) {
-        currentPiece.removeAttribute('id');
+        console.log("regular move is valid");
+        currentPiece.removeAttribute("id");
         currentPiece.classList.remove("p1-piece");
         clickedTile.firstElementChild.classList.add("p1-piece");
         console.dir(clickedTile);
         console.log(clickedTile.firstElementChild.classList);
         chewyDialogue();
-        p1DltHandlePieceEventListener()
-        dltTileEventListener()
-        p1TextEl.style.opacity = '0.3'
-        p2TextEl.style.opacity = '1'
-        turn = false
-        currentPiece = null
-        p2PieceEl = document.querySelectorAll(".p2-piece")
-        p2AddHandlePieceEventListener()
-      }
-       else if (currentPiece.classList.contains("p2-piece")) {
-        currentPiece.removeAttribute('id');
+        p1DltHandlePieceEventListener();
+        dltTileEventListener();
+        p1TextEl.style.opacity = "0.3";
+        p2TextEl.style.opacity = "1";
+        turn = false;
+        currentPiece = null;
+        p1ValidMove = null;
+        p2ValidMove = null;
+        p2PieceEl = document.querySelectorAll(".p2-piece");
+        p2AddHandlePieceEventListener();
+      } else if (currentPiece.classList.contains("p2-piece")) {
+        console.log("regular move is valid");
+        currentPiece.removeAttribute("id");
         currentPiece.classList.remove("p2-piece");
         clickedTile.firstElementChild.classList.add("p2-piece");
         console.dir(clickedTile);
         console.log(clickedTile.firstElementChild.classList);
         chewyDialogue();
-        p2DltHandlePieceEventListener()
-        dltTileEventListener()
-        p1TextEl.style.opacity = '1'
-        p2TextEl.style.opacity = '0.3'
-        turn = true
-        currentPiece = null
-        p1PieceEl = document.querySelectorAll(".p1-piece")
-        p1AddHandlePieceEventListener()
+        p2DltHandlePieceEventListener();
+        dltTileEventListener();
+        p1TextEl.style.opacity = "1";
+        p2TextEl.style.opacity = "0.3";
+        turn = true;
+        currentPiece = null;
+        p1ValidMove = null;
+        p2ValidMove = null;
+        p1PieceEl = document.querySelectorAll(".p1-piece");
+        p1AddHandlePieceEventListener();
+      }
+    } else if (removeEnemyPiece === true) {
+      console.log("valid move to eat enemy piece");
+      determineIfEnemyPiece();
+      if (currentPiece !== null) {
       }
     }
   }
-//   console.log(tileNumber);
-//   console.log(pieceOnTile);
+
+  function determineIfEnemyPiece() {
+    console.log("piece on tile" + pieceOnTile + " tile number" + tileNumber);
+    let enemyPiece;
+    if (turn === true) {
+      enemyPiece = Math.ceil(
+        pieceOnTile * 1 + (tileNumber * 1 - pieceOnTile * 1) / 2
+      );
+      console.log(enemyPiece);
+      console.dir(tiles);
+      tiles.forEach((num, index) => {
+        if (num.dataset.value == enemyPiece) {
+          return (enemyTile = num);
+        }
+      });
+      if (enemyTile.firstElementChild.classList.value === "p2-piece") {
+        console.log("eating enemy piece");
+        enemyTile.firstElementChild.classList.remove("p2-piece");
+        currentPiece.removeAttribute("id");
+        currentPiece.classList.remove("p1-piece");
+        clickedTile.firstElementChild.classList.add("p1-piece");
+        clickedTile.firstElementChild.style.opacity = "1";
+        console.dir(enemyTile.firstElementChild.classList);
+      } else {
+      }
+    }
+    if (turn === false) {
+      enemyPiece = Math.floor(
+        pieceOnTile * 1 - (pieceOnTile * 1 - tileNumber * 1) / 2
+      );
+      tiles.forEach((num, index) => {
+        if (num.dataset.value == enemyPiece) {
+          return (enemyTile = num);
+        }
+      });
+      console.log(enemyPiece);
+      if (enemyTile.firstElementChild.classList.value === "p1-piece") {
+        console.log("eating enemy piece");
+        enemyTile.firstElementChild.classList.remove("p1-piece");
+        currentPiece.removeAttribute("id");
+        currentPiece.classList.remove("p2-piece");
+        clickedTile.firstElementChild.classList.add("p2-piece");
+        clickedTile.firstElementChild.style.opacity = "1";
+        console.dir(enemyTile.firstElementChild.classList);
+      } else {
+      }
+    }
+  }
 }
 
 /*----- functions -----*/
@@ -233,25 +291,36 @@ function handleTileClick(e) {
 //     }
 // }
 
-function invalidMove(){
-//     if (turn === true || turn == false)
-//     (tileOfPiece.firstElementChild.classList.contains("p2-piece") ||
-//           tileOfPiece.lastElementChild.classList.contains("p1-piece"))){
-//     console.log("invalid move");
-//     console.dir(tileOfPiece.firstElementChild);
-//     }
+function indicatePlayerTurn() {
+  if (turn === true) {
+    p1TextEl.style.opacity = "1";
+    p2TextEl.style.opacity = "0.3";
+  } else if (turn === false) {
+    p1TextEl.style.opacity = "0.3";
+    p2TextEl.style.opacity = "1";
+  }
+}
+
+function endTurn() {
+  if (turn === true) {
+    p1DltHandlePieceEventListener();
+    dltTileEventListener();
+    turn === false;
+    p2AddHandlePieceEventListener();
+  }
 }
 
 function chewyDialogue() {
-    chewyTextEl.textContent =
-      chewyPhrases[Math.floor(Math.random() * chewyPhrases.length)];
-  }
+  chewyTextEl.textContent =
+    chewyPhrases[Math.floor(Math.random() * chewyPhrases.length)];
+}
 
 function validMove() {
-//   tileNumber;
-//   console.log("tile number of current piece" + pieceOnTile);
-//   console.log("selected tile to move to" + tileNumber);
-  console.log("player turn" + turn);
+  let tileDifference = pieceOnTile - tileNumber;
+  //   tileNumber;
+  //   console.log("tile number of current piece" + pieceOnTile);
+  //   console.log("selected tile to move to" + tileNumber);
+  //   console.log("player turn" + turn);
   if (turn === true) {
     if (
       (pieceOnTile === "1" && tileNumber === "5") ||
@@ -301,73 +370,85 @@ function validMove() {
       (pieceOnTile === "26" && tileNumber === "30") ||
       (pieceOnTile === "27" && tileNumber === "32") ||
       (pieceOnTile === "27" && tileNumber === "31") ||
-      (pieceOnTile === "28" && tileNumber === "32")) {
+      (pieceOnTile === "28" && tileNumber === "32")
+    ) {
       p1ValidMove = true;
+      console.log("p1ValidMove = " + p1ValidMove);
+    } else if (tileDifference === -9 || tileDifference === -7) {
+      removeEnemyPiece = true;
+      //   console.log("can move piece to a different of tiles 7-9");
     } else {
       p1ValidMove = false;
     }
-  } else if 
-    ((pieceOnTile === "5" && tileNumber === "2") ||
-    (pieceOnTile === "5" && tileNumber === "1") ||
-    (pieceOnTile === "6" && tileNumber === "3") ||
-    (pieceOnTile === "6" && tileNumber === "2") ||
-    (pieceOnTile === "7" && tileNumber === "4") ||
-    (pieceOnTile === "7" && tileNumber === "3") ||
-    (pieceOnTile === "8" && tileNumber === "4") ||
-    (pieceOnTile === "13" && tileNumber === "9") ||
-    (pieceOnTile === "13" && tileNumber === "10") ||
-    (pieceOnTile === "14" && tileNumber === "10") ||
-    (pieceOnTile === "14" && tileNumber === "11") ||
-    (pieceOnTile === "15" && tileNumber === "11") ||
-    (pieceOnTile === "15" && tileNumber === "12") ||
-    (pieceOnTile === "16" && tileNumber === "12") ||
-    (pieceOnTile === "17" && tileNumber === "13") ||
-    (pieceOnTile === "18" && tileNumber === "13") ||
-    (pieceOnTile === "18" && tileNumber === "14") ||
-    (pieceOnTile === "19" && tileNumber === "15") ||
-    (pieceOnTile === "19" && tileNumber === "14") ||
-    (pieceOnTile === "20" && tileNumber === "16") ||
-    (pieceOnTile === "20" && tileNumber === "15") ||
-    (pieceOnTile === "21" && tileNumber === "17") ||
-    (pieceOnTile === "21" && tileNumber === "18") ||
-    (pieceOnTile === "22" && tileNumber === "18") ||
-    (pieceOnTile === "22" && tileNumber === "19") ||
-    (pieceOnTile === "23" && tileNumber === "19") ||
-    (pieceOnTile === "23" && tileNumber === "20") ||
-    (pieceOnTile === "24" && tileNumber === "20") ||
-    (pieceOnTile === "25" && tileNumber === "21") ||
-    (pieceOnTile === "26" && tileNumber === "22") ||
-    (pieceOnTile === "26" && tileNumber === "21") ||
-    (pieceOnTile === "27" && tileNumber === "22") ||
-    (pieceOnTile === "27" && tileNumber === "23") ||
-    (pieceOnTile === "28" && tileNumber === "23") ||
-    (pieceOnTile === "28" && tileNumber === "24") ||
-    (pieceOnTile === "29" && tileNumber === "25") ||
-    (pieceOnTile === "29" && tileNumber === "26") ||
-    (pieceOnTile === "30" && tileNumber === "26") ||
-    (pieceOnTile === "30" && tileNumber === "27") ||
-    (pieceOnTile === "31" && tileNumber === "27") ||
-    (pieceOnTile === "31" && tileNumber === "28") ||
-    (pieceOnTile === "32" && tileNumber === "28")){
-    p2ValidMove = true;
-    console.log('running P2 valid if statement');
-    // const temp = tileOfPiece.firstElementChild
-    } else {
-    const tileDifference = tileNumber - pieceOnTile;
+  } else if (turn === false) {
     if (
-      tileDifference === -9 || tileDifference === -7 ||
-      tileDifference === 7 || tileDifference === 9
+      (pieceOnTile === "5" && tileNumber === "2") ||
+      (pieceOnTile === "5" && tileNumber === "1") ||
+      (pieceOnTile === "6" && tileNumber === "3") ||
+      (pieceOnTile === "6" && tileNumber === "2") ||
+      (pieceOnTile === "7" && tileNumber === "4") ||
+      (pieceOnTile === "7" && tileNumber === "3") ||
+      (pieceOnTile === "8" && tileNumber === "4") ||
+      (pieceOnTile === "13" && tileNumber === "9") ||
+      (pieceOnTile === "13" && tileNumber === "10") ||
+      (pieceOnTile === "14" && tileNumber === "10") ||
+      (pieceOnTile === "14" && tileNumber === "11") ||
+      (pieceOnTile === "15" && tileNumber === "11") ||
+      (pieceOnTile === "15" && tileNumber === "12") ||
+      (pieceOnTile === "16" && tileNumber === "12") ||
+      (pieceOnTile === "17" && tileNumber === "13") ||
+      (pieceOnTile === "18" && tileNumber === "13") ||
+      (pieceOnTile === "18" && tileNumber === "14") ||
+      (pieceOnTile === "19" && tileNumber === "15") ||
+      (pieceOnTile === "19" && tileNumber === "14") ||
+      (pieceOnTile === "20" && tileNumber === "16") ||
+      (pieceOnTile === "20" && tileNumber === "15") ||
+      (pieceOnTile === "21" && tileNumber === "17") ||
+      (pieceOnTile === "21" && tileNumber === "18") ||
+      (pieceOnTile === "22" && tileNumber === "18") ||
+      (pieceOnTile === "22" && tileNumber === "19") ||
+      (pieceOnTile === "23" && tileNumber === "19") ||
+      (pieceOnTile === "23" && tileNumber === "20") ||
+      (pieceOnTile === "24" && tileNumber === "20") ||
+      (pieceOnTile === "25" && tileNumber === "21") ||
+      (pieceOnTile === "26" && tileNumber === "22") ||
+      (pieceOnTile === "26" && tileNumber === "21") ||
+      (pieceOnTile === "27" && tileNumber === "22") ||
+      (pieceOnTile === "27" && tileNumber === "23") ||
+      (pieceOnTile === "28" && tileNumber === "23") ||
+      (pieceOnTile === "28" && tileNumber === "24") ||
+      (pieceOnTile === "29" && tileNumber === "25") ||
+      (pieceOnTile === "29" && tileNumber === "26") ||
+      (pieceOnTile === "30" && tileNumber === "26") ||
+      (pieceOnTile === "30" && tileNumber === "27") ||
+      (pieceOnTile === "31" && tileNumber === "27") ||
+      (pieceOnTile === "31" && tileNumber === "28") ||
+      (pieceOnTile === "32" && tileNumber === "28")
     ) {
-      const skippedTileNumber = pieceOnTile + (tileDifference / 2);} // Calculate the tile number to skip
-
-      if (boardContainsEnemyPiece(skippedTileNumber)) {
-        p2ValidMove = true;
-  }
+      p2ValidMove = true;
+      //   console.log("running P2 valid if statement");
+    } else if (tileDifference === 7 || tileDifference === 9) {
+      removeEnemyPiece = true;
+      console.log("can move piece to a different of tiles 7-9");
+    } else {
+      p1ValidMove = false;
+      // const tileDifference = pieceOnTile - tileNumber;
+      // console.log(tileDifference)
+      console.log("p2ValidMove = " + p2ValidMove);
     }
-  console.log(p2ValidMove);
-
+    //   } else if (
+    //         (turn === true && (tileDifference === -9 || tileDifference === -7)) ||
+    //         (turn === false && (tileDifference === 7 || tileDifference === 9))) {
+    //           removeEnemyPiece = true
+    //         //   p2ValidMove = false
+    //         //   p1ValidMove = false
+    //         //   console.log(tileDifference/2)
+    //           console.log('removeEnemyPiece = '+removeEnemyPiece)
+    //       } else {
+    //         removeEnemyPiece = false
+  }
+  //   console.log(p2ValidMove);
 }
-
 
 // function countPieces(){
 //     for(let i=0; i<p1PieceEl.length-1; i++){
@@ -379,8 +460,6 @@ function validMove() {
 // }
 // countPieces()
 // console.dir(p1PieceEl)
-
-
 
 // function render(){
 //     trn
@@ -402,5 +481,3 @@ function validMove() {
 // }
 
 // function endGame(){
-
-    
