@@ -48,3 +48,17 @@
 //         }
 //     }
 // }
+
+
+Code from the validMove() function
+        //   (((pieceOnTile >= 1 && pieceOnTile <= 4) || (pieceOnTile >= 9 && pieceOnTile <= 12) || (pieceOnTile >= 17 && pieceOnTile <= 20) || (pieceOnTile >= 25 && pieceOnTile <= 28)) &&
+        //     (pieceOnTile - tileNumber >= -4 && pieceOnTile - tileNumber <= -3)) || ((pieceOnTile >= 5 && pieceOnTile <= 8) || (pieceOnTile >= 13 && pieceOnTile <= 16) || (pieceOnTile >= 21 && pieceOnTile <= 24)) && (pieceOnTile - tileNumber >= -5 &&
+        //         pieceOnTile - tileNumber <= -4))
+        // if (turn === false &&
+    //     (((pieceOnTile >= 9 && pieceOnTile <= 12) || (pieceOnTile >= 17 && pieceOnTile <= 20) || (pieceOnTile >= 25 && pieceOnTile <= 28)) &&
+    //     (pieceOnTile - tileNumber >= 3 && pieceOnTile - tileNumber <= 4)) || ((pieceOnTile >= 5 && pieceOnTile <= 8) || (pieceOnTile >= 13 && pieceOnTile <= 16) || (pieceOnTile >= 21 && pieceOnTile <= 24) || (pieceOnTile >= 29 && pieceOnTile <= 32)) && (pieceOnTile - tileNumber >= 4 &&
+    //         pieceOnTile - tileNumber <= 5)){
+    //             p2ValidMove = true
+    //         }else{
+    //             p2ValidMove = false
+    //         }

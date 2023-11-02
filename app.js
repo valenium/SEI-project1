@@ -54,7 +54,7 @@ const tiles = document.querySelectorAll("#tile");
 
 // Play pieces
 const p1PieceEl = document.querySelectorAll(".p1-piece");
-console.dir(p1PieceEl)
+console.dir(p1PieceEl);
 const p2PieceEl = document.querySelectorAll(".p2-piece");
 
 // Dialogue/stat box
@@ -64,45 +64,41 @@ const chewyTextEl = document.querySelector("#chewy-phrase");
 const p1ScoreEl = document.querySelector("#p1-score");
 const p2ScoreEl = document.querySelector("#p2-score");
 
-
 /*----- event listeners -----*/
 
 // Player 1 clicks on piece to move
-const p1AddHandlePieceEventListener = () => p1PieceEl.forEach((move) =>
-  move.addEventListener("click", handlePieceClick)
-);
+const p1AddHandlePieceEventListener = () =>
+  p1PieceEl.forEach((move) => move.addEventListener("click", handlePieceClick));
 
-const p1DltHandlePieceEventListener = () => p1PieceEl.forEach((move) =>
-  move.removeEventListener("click", handlePieceClick)
-);
+const p1DltHandlePieceEventListener = () =>
+  p1PieceEl.forEach((move) =>
+    move.removeEventListener("click", handlePieceClick)
+  );
 
-const p2AddHandlePieceEventListener = () => p2PieceEl.forEach((move) =>
-  move.addEventListener("click", handlePieceClick)
-);
+const p2AddHandlePieceEventListener = () =>
+  p2PieceEl.forEach((move) => move.addEventListener("click", handlePieceClick));
 
-const p2DltHandlePieceEventListener = () => p1PieceEl.forEach((move) =>
-  move.removeEventListener("click", handlePieceClick)
-);
+const p2DltHandlePieceEventListener = () =>
+  p1PieceEl.forEach((move) =>
+    move.removeEventListener("click", handlePieceClick)
+  );
 
-const addTileEventListener = () => tiles.forEach((place) =>
-  place.addEventListener("click", handleTileClick)
-);
+const addTileEventListener = () =>
+  tiles.forEach((place) => place.addEventListener("click", handleTileClick));
 
-const dltTileEventListener = () => tiles.forEach((place) =>
-  place.removeEventListener("click", handleTileClick)
-);
-
+const dltTileEventListener = () =>
+  tiles.forEach((place) => place.removeEventListener("click", handleTileClick));
 
 // for loop that iterates through the board variable and ties it's values to the tiless
 for (let i = 0; i < tiles.length; i++) {
-    const tile = tiles[i];
-    row = Math.floor(i / 8);
-    col = i % 8;
-    tile.dataset.value = board[row][col];
-  }
+  const tile = tiles[i];
+  row = Math.floor(i / 8);
+  col = i % 8;
+  tile.dataset.value = board[row][col];
+}
 
-turn = true
-p1AddHandlePieceEventListener()
+turn = false;
+p2AddHandlePieceEventListener();
 // To select piece player wants to move
 function handlePieceClick(e) {
   e.preventDefault();
@@ -117,92 +113,70 @@ function handlePieceClick(e) {
     chewyTextEl.textContent = "not your turn! >:(";
     piece.style.opacity = "1";
     // currentPiece = null;
-    p1PieceEl.forEach(function(element){
-        element.style.opacity = "1" 
-    })
-    p2PieceEl.forEach(function(element){
-        element.style.opacity = "1" 
-    })
-    console.log(currentPiece)
+    p1PieceEl.forEach(function (element) {
+      element.style.opacity = "1";
+    });
+    p2PieceEl.forEach(function (element) {
+      element.style.opacity = "1";
+    });
+    console.log(currentPiece);
     // return;
-//   } if (currentPiece === piece) {
-//     chewyTextEl.textContent = chewyPhrases[0];
-//     piece.style.opacity = "1";
-//     currentPiece = null;
-//     console.log(currentPiece)
-  } if (currentPiece) {
+    //   } if (currentPiece === piece) {
+    //     chewyTextEl.textContent = chewyPhrases[0];
+    //     piece.style.opacity = "1";
+    //     currentPiece = null;
+    //     console.log(currentPiece)
+  }
+  if (currentPiece) {
     chewyTextEl.textContent = chewyPhrases[0];
     currentPiece.style.opacity = "1";
-  } if (piece && currentPiece !== piece){
+  }
+  if (piece && currentPiece !== piece) {
     currentPiece = piece;
     chewyTextEl.textContent = chewyPhrases[0];
     piece.style.opacity = "0.3";
     addTileEventListener();
   }
-  console.log(tileOfPiece);
+  console.dir(tileOfPiece);
   console.log(currentPiece);
   console.log(currentPiece.parentElement.dataset.value);
-  
 }
-
 // To move selected piece to tile
 function handleTileClick(e) {
   e.preventDefault();
   const clickedTile = e.target;
   tileNumber = clickedTile.dataset.value;
-// //   let i;
+  // stores the tile number of the piece that player has clicked
   pieceOnTile = currentPiece.parentElement.dataset.value;
-// //   for (i = 0; i < board.length; i++) {
-// //     return i;
-// //   }
-// //   // console.log(board[row])
-// //   // If select white tile -> invalid move
-// //   if (tileNumber === null) {
-// //     chewyTextEl.textContent = "invalid move";
-// //     return;
-// //   }
-   if (tileNumber === undefined){
-    console.log('waiting for tile to be selected')
-   }else{
-        validMove()
-            if (p1ValidMove === false || p2ValidMove === false){
-                chewyTextEl.textContent = "invalid move"
-                console.log('piece is on tile' + pieceOnTile)
-                console.log('invalid move. clicked on tile ' + tileNumber)
-                return
-            } else if (p1ValidMove === true || p2ValidMove === true){
-                console.log('moved piece to' + pieceOnTile)
-                currentPiece.classList.remove('p1-piece')
-                console.dir(clickedTile)
-                console.log(clickedTile.classList)
-                // p1PieceEl.parentNode.removeChild(p1PieceEl)
-                chewyDialogue()
-            }
-        }
-//   if (
-//     (turn === true &&
-//       ((board[i] % 2 === 0 &&
-//         (pieceOnTile - tileNumber >= -4 || pieceOnTile - tileNumber <= -3)) ||
-//         (board[i] % 2 !== 0 &&
-//           (pieceOnTile - tileNumber >= -5 ||
-//             pieceOnTile - tileNumber <= -4)))) ||
-//     (turn === false &&
-//       ((board[i] % 2 === 0 &&
-//         (pieceOnTile - tileNumber >= 3 || pieceOnTile - tileNumber <= 4)) ||
-//         (board[i] % 2 !== 0 &&
-//           (pieceOnTile - tileNumber >= 4 || pieceOnTile - tileNumber <= 5))))
-//   ) 
-//   {
-//     pieceOnTile = tileNumber;
-//     // } else if {
-//   } else {
-//     chewyTextEl.innerContent = "invalid move";
-//     return;
-//   }
-//   if (clickedTile === clickedTile)
-  clickedTile.style.opacity = '0.3'
-  console.log(tileNumber)
-  console.log(pieceOnTile)
+  if (tileNumber === undefined) {
+    console.log("waiting for tile to be selected");
+  } else {
+    validMove();
+    // if (p1ValidMove === false || p2ValidMove === false) {
+    //   chewyTextEl.textContent = "invalid move";
+    //   console.log("piece is on tile" + pieceOnTile);
+    //   console.log("invalid move. clicked on tile " + tileNumber);
+    //   // return
+    // } else 
+    if (p1ValidMove === true || p2ValidMove === true) {
+      console.log("moved piece to" + pieceOnTile);
+      if (currentPiece.classList.contains("p1-piece")) {
+        currentPiece.classList.remove("p1-piece");
+        clickedTile.firstElementChild.classList.add("p1-piece");
+        console.dir(clickedTile);
+        console.log(clickedTile.firstElementChild.classList);
+        chewyDialogue();
+      }
+      if (currentPiece.classList.contains("p2-piece")) {
+        currentPiece.classList.remove("p2-piece");
+        clickedTile.firstElementChild.classList.add("p2-piece");
+        console.dir(clickedTile);
+        console.log(clickedTile.firstElementChild.classList);
+      }
+    }
+  }
+//   console.log(tileNumber);
+//   console.log(pieceOnTile);
 }
 
 /*----- functions -----*/
@@ -234,28 +208,124 @@ function handleTileClick(e) {
 //         }
 //     }
 // }
-function validMove(){
-    console.log('tile number of current piece' + pieceOnTile)
-    console.log('selected tile to move to' + tileNumber)
-    if (turn === true && 
-        (pieceOnTile === '9' && tileNumber === '13'))
-        //   (((pieceOnTile >= 1 && pieceOnTile <= 4) || (pieceOnTile >= 9 && pieceOnTile <= 12) || (pieceOnTile >= 17 && pieceOnTile <= 20) || (pieceOnTile >= 25 && pieceOnTile <= 28)) &&
-        //     (pieceOnTile - tileNumber >= -4 && pieceOnTile - tileNumber <= -3)) || ((pieceOnTile >= 5 && pieceOnTile <= 8) || (pieceOnTile >= 13 && pieceOnTile <= 16) || (pieceOnTile >= 21 && pieceOnTile <= 24)) && (pieceOnTile - tileNumber >= -5 &&
-        //         pieceOnTile - tileNumber <= -4))
-                {
-                    p1ValidMove = true
-                }else{
-                    p1ValidMove = false
-                }
-    // if (turn === false &&
-    //     (((pieceOnTile >= 9 && pieceOnTile <= 12) || (pieceOnTile >= 17 && pieceOnTile <= 20) || (pieceOnTile >= 25 && pieceOnTile <= 28)) &&
-    //     (pieceOnTile - tileNumber >= 3 && pieceOnTile - tileNumber <= 4)) || ((pieceOnTile >= 5 && pieceOnTile <= 8) || (pieceOnTile >= 13 && pieceOnTile <= 16) || (pieceOnTile >= 21 && pieceOnTile <= 24) || (pieceOnTile >= 29 && pieceOnTile <= 32)) && (pieceOnTile - tileNumber >= 4 &&
-    //         pieceOnTile - tileNumber <= 5)){
-    //             p2ValidMove = true
-    //         }else{
-    //             p2ValidMove = false
-    //         }
-    console.log(p1ValidMove)
+
+function invalidMove()
+
+function validMove() {
+//   tileNumber;
+//   console.log("tile number of current piece" + pieceOnTile);
+//   console.log("selected tile to move to" + tileNumber);
+  console.log("player turn" + turn);
+  if (turn === true) {
+    if (
+      (pieceOnTile === "1" && tileNumber === "5") ||
+      (pieceOnTile === "2" && tileNumber === "6") ||
+      (pieceOnTile === "2" && tileNumber === "7") ||
+      (pieceOnTile === "3" && tileNumber === "7") ||
+      (pieceOnTile === "3" && tileNumber === "8") ||
+      (pieceOnTile === "4" && tileNumber === "8") ||
+      (pieceOnTile === "5" && tileNumber === "10") ||
+      (pieceOnTile === "5" && tileNumber === "9") ||
+      (pieceOnTile === "6" && tileNumber === "11") ||
+      (pieceOnTile === "6" && tileNumber === "10") ||
+      (pieceOnTile === "7" && tileNumber === "12") ||
+      (pieceOnTile === "7" && tileNumber === "11") ||
+      (pieceOnTile === "8" && tileNumber === "12") ||
+      (pieceOnTile === "9" && tileNumber === "13") ||
+      (pieceOnTile === "10" && tileNumber === "13") ||
+      (pieceOnTile === "10" && tileNumber === "14") ||
+      (pieceOnTile === "11" && tileNumber === "14") ||
+      (pieceOnTile === "11" && tileNumber === "15") ||
+      (pieceOnTile === "12" && tileNumber === "16") ||
+      (pieceOnTile === "13" && tileNumber === "18") ||
+      (pieceOnTile === "13" && tileNumber === "17") ||
+      (pieceOnTile === "14" && tileNumber === "19") ||
+      (pieceOnTile === "14" && tileNumber === "18") ||
+      (pieceOnTile === "15" && tileNumber === "20") ||
+      (pieceOnTile === "15" && tileNumber === "19") ||
+      (pieceOnTile === "16" && tileNumber === "20") ||
+      (pieceOnTile === "17" && tileNumber === "22") ||
+      (pieceOnTile === "17" && tileNumber === "21") ||
+      (pieceOnTile === "18" && tileNumber === "23") ||
+      (pieceOnTile === "18" && tileNumber === "22") ||
+      (pieceOnTile === "19" && tileNumber === "24") ||
+      (pieceOnTile === "19" && tileNumber === "23") ||
+      (pieceOnTile === "20" && tileNumber === "24") ||
+      (pieceOnTile === "21" && tileNumber === "26") ||
+      (pieceOnTile === "21" && tileNumber === "25") ||
+      (pieceOnTile === "22" && tileNumber === "27") ||
+      (pieceOnTile === "22" && tileNumber === "26") ||
+      (pieceOnTile === "23" && tileNumber === "28") ||
+      (pieceOnTile === "23" && tileNumber === "27") ||
+      (pieceOnTile === "24" && tileNumber === "28") ||
+      (pieceOnTile === "25" && tileNumber === "30") ||
+      (pieceOnTile === "25" && tileNumber === "29") ||
+      (pieceOnTile === "26" && tileNumber === "31") ||
+      (pieceOnTile === "26" && tileNumber === "30") ||
+      (pieceOnTile === "27" && tileNumber === "32") ||
+      (pieceOnTile === "27" && tileNumber === "31") ||
+      (pieceOnTile === "28" && tileNumber === "32")
+    ) {
+      p1ValidMove = true;
+    } else {
+      p1ValidMove = false;
+    }
+  } else if 
+//     turn === false &&
+//     (tileOfPiece.firstElementChild.classList.contains("p2-piece") ||
+//       tileOfPiece.lastElementChild.classList.contains("p1-piece"))
+//   ) {
+//     console.log("invalid move");
+//     console.dir(tileOfPiece.firstElementChild);
+    (turn === false && (pieceOnTile === "5" && tileNumber === "2") ||
+    (pieceOnTile === "5" && tileNumber === "1") ||
+    (pieceOnTile === "6" && tileNumber === "3") ||
+    (pieceOnTile === "6" && tileNumber === "2") ||
+    (pieceOnTile === "7" && tileNumber === "4") ||
+    (pieceOnTile === "7" && tileNumber === "3") ||
+    (pieceOnTile === "8" && tileNumber === "4") ||
+    (pieceOnTile === "13" && tileNumber === "9") ||
+    (pieceOnTile === "13" && tileNumber === "10") ||
+    (pieceOnTile === "14" && tileNumber === "10") ||
+    (pieceOnTile === "14" && tileNumber === "11") ||
+    (pieceOnTile === "15" && tileNumber === "11") ||
+    (pieceOnTile === "15" && tileNumber === "12") ||
+    (pieceOnTile === "16" && tileNumber === "12") ||
+    (pieceOnTile === "17" && tileNumber === "13") ||
+    (pieceOnTile === "18" && tileNumber === "13") ||
+    (pieceOnTile === "18" && tileNumber === "14") ||
+    (pieceOnTile === "19" && tileNumber === "15") ||
+    (pieceOnTile === "19" && tileNumber === "14") ||
+    (pieceOnTile === "20" && tileNumber === "16") ||
+    (pieceOnTile === "20" && tileNumber === "15") ||
+    (pieceOnTile === "21" && tileNumber === "17") ||
+    (pieceOnTile === "21" && tileNumber === "18") ||
+    (pieceOnTile === "22" && tileNumber === "18") ||
+    (pieceOnTile === "22" && tileNumber === "19") ||
+    (pieceOnTile === "23" && tileNumber === "19") ||
+    (pieceOnTile === "23" && tileNumber === "20") ||
+    (pieceOnTile === "24" && tileNumber === "20") ||
+    (pieceOnTile === "25" && tileNumber === "21") ||
+    (pieceOnTile === "26" && tileNumber === "22") ||
+    (pieceOnTile === "26" && tileNumber === "21") ||
+    (pieceOnTile === "27" && tileNumber === "22") ||
+    (pieceOnTile === "27" && tileNumber === "23") ||
+    (pieceOnTile === "28" && tileNumber === "23") ||
+    (pieceOnTile === "28" && tileNumber === "24") ||
+    (pieceOnTile === "29" && tileNumber === "25") ||
+    (pieceOnTile === "29" && tileNumber === "26") ||
+    (pieceOnTile === "30" && tileNumber === "26") ||
+    (pieceOnTile === "30" && tileNumber === "27") ||
+    (pieceOnTile === "31" && tileNumber === "27") ||
+    (pieceOnTile === "31" && tileNumber === "28") ||
+    (pieceOnTile === "32" && tileNumber === "28")){
+    p2ValidMove = true;
+    console.log('running P2 valid if statement');
+    // const temp = tileOfPiece.firstElementChild
+  } else {
+    p2ValidMove = false;
+  }
+  console.log(p2ValidMove);
 }
 
 
