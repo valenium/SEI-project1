@@ -53,9 +53,9 @@ const tiles = document.querySelectorAll("#tile");
 // console.log(tiles[0].dataset.value)
 
 // Play pieces
-const p1PieceEl = document.querySelectorAll(".p1-piece");
+let p1PieceEl = document.querySelectorAll(".p1-piece");
 console.dir(p1PieceEl);
-const p2PieceEl = document.querySelectorAll(".p2-piece");
+let p2PieceEl = document.querySelectorAll(".p2-piece");
 
 // Dialogue/stat box
 const p1TextEl = document.querySelector("#player1-prompt");
@@ -79,7 +79,7 @@ const p2AddHandlePieceEventListener = () =>
   p2PieceEl.forEach((move) => move.addEventListener("click", handlePieceClick));
 
 const p2DltHandlePieceEventListener = () =>
-  p1PieceEl.forEach((move) =>
+  p2PieceEl.forEach((move) =>
     move.removeEventListener("click", handlePieceClick)
   );
 
@@ -97,8 +97,9 @@ for (let i = 0; i < tiles.length; i++) {
   tile.dataset.value = board[row][col];
 }
 
-turn = false;
-p2AddHandlePieceEventListener();
+turn = true;
+p1AddHandlePieceEventListener();
+p2TextEl.style.opacity = '0.3'
 // To select piece player wants to move
 function handlePieceClick(e) {
   e.preventDefault();
@@ -144,7 +145,7 @@ function handlePieceClick(e) {
 // To move selected piece to tile
 function handleTileClick(e) {
   e.preventDefault();
-  const clickedTile = e.target;
+  clickedTile = e.target;
   tileNumber = clickedTile.dataset.value;
   // stores the tile number of the piece that player has clicked
   pieceOnTile = currentPiece.parentElement.dataset.value;
@@ -161,17 +162,36 @@ function handleTileClick(e) {
     if (p1ValidMove === true || p2ValidMove === true) {
       console.log("moved piece to" + pieceOnTile);
       if (currentPiece.classList.contains("p1-piece")) {
+        currentPiece.removeAttribute('id');
         currentPiece.classList.remove("p1-piece");
         clickedTile.firstElementChild.classList.add("p1-piece");
         console.dir(clickedTile);
         console.log(clickedTile.firstElementChild.classList);
         chewyDialogue();
+        p1DltHandlePieceEventListener()
+        dltTileEventListener()
+        p1TextEl.style.opacity = '0.3'
+        p2TextEl.style.opacity = '1'
+        turn = false
+        currentPiece = null
+        p2PieceEl = document.querySelectorAll(".p2-piece")
+        p2AddHandlePieceEventListener()
       }
-      if (currentPiece.classList.contains("p2-piece")) {
+       else if (currentPiece.classList.contains("p2-piece")) {
+        currentPiece.removeAttribute('id');
         currentPiece.classList.remove("p2-piece");
         clickedTile.firstElementChild.classList.add("p2-piece");
         console.dir(clickedTile);
         console.log(clickedTile.firstElementChild.classList);
+        chewyDialogue();
+        p2DltHandlePieceEventListener()
+        dltTileEventListener()
+        p1TextEl.style.opacity = '1'
+        p2TextEl.style.opacity = '0.3'
+        turn = true
+        currentPiece = null
+        p1PieceEl = document.querySelectorAll(".p1-piece")
+        p1AddHandlePieceEventListener()
       }
     }
   }
@@ -209,7 +229,19 @@ function handleTileClick(e) {
 //     }
 // }
 
-function invalidMove()
+function invalidMove(){
+//     if (turn === true || turn == false)
+//     (tileOfPiece.firstElementChild.classList.contains("p2-piece") ||
+//           tileOfPiece.lastElementChild.classList.contains("p1-piece"))){
+//     console.log("invalid move");
+//     console.dir(tileOfPiece.firstElementChild);
+//     }
+}
+
+function chewyDialogue() {
+    chewyTextEl.textContent =
+      chewyPhrases[Math.floor(Math.random() * chewyPhrases.length)];
+  }
 
 function validMove() {
 //   tileNumber;
@@ -237,6 +269,7 @@ function validMove() {
       (pieceOnTile === "11" && tileNumber === "14") ||
       (pieceOnTile === "11" && tileNumber === "15") ||
       (pieceOnTile === "12" && tileNumber === "16") ||
+      (pieceOnTile === "12" && tileNumber === "15") ||
       (pieceOnTile === "13" && tileNumber === "18") ||
       (pieceOnTile === "13" && tileNumber === "17") ||
       (pieceOnTile === "14" && tileNumber === "19") ||
@@ -264,20 +297,20 @@ function validMove() {
       (pieceOnTile === "26" && tileNumber === "30") ||
       (pieceOnTile === "27" && tileNumber === "32") ||
       (pieceOnTile === "27" && tileNumber === "31") ||
-      (pieceOnTile === "28" && tileNumber === "32")
-    ) {
+      (pieceOnTile === "28" && tileNumber === "32")) {
       p1ValidMove = true;
     } else {
       p1ValidMove = false;
     }
-  } else if 
-//     turn === false &&
-//     (tileOfPiece.firstElementChild.classList.contains("p2-piece") ||
-//       tileOfPiece.lastElementChild.classList.contains("p1-piece"))
-//   ) {
-//     console.log("invalid move");
-//     console.dir(tileOfPiece.firstElementChild);
-    (turn === false && (pieceOnTile === "5" && tileNumber === "2") ||
+  } else if
+    (turn === false){
+        if (clickedTile.firstElementChild.classList.contains("p2-piece") ||
+        clickedTile.firstElementChild.classList.contains("p1-piece")){
+            console.log("invalid move");
+            console.dir(tileOfPiece.firstElementChild);
+    
+    } else if 
+    ((pieceOnTile === "5" && tileNumber === "2") ||
     (pieceOnTile === "5" && tileNumber === "1") ||
     (pieceOnTile === "6" && tileNumber === "3") ||
     (pieceOnTile === "6" && tileNumber === "2") ||
@@ -322,10 +355,20 @@ function validMove() {
     p2ValidMove = true;
     console.log('running P2 valid if statement');
     // const temp = tileOfPiece.firstElementChild
-  } else {
-    p2ValidMove = false;
+    } else {
+    const tileDifference = tileNumber - pieceOnTile;
+    if (
+      tileDifference === -9 || tileDifference === -7 ||
+      tileDifference === 7 || tileDifference === 9
+    ) {
+      const skippedTileNumber = pieceOnTile + (tileDifference / 2);} // Calculate the tile number to skip
+
+      if (boardContainsEnemyPiece(skippedTileNumber)) {
+        p2ValidMove = true;
   }
+    }
   console.log(p2ValidMove);
+
 }
 
 
@@ -340,10 +383,7 @@ function validMove() {
 // countPieces()
 // console.dir(p1PieceEl)
 
-function chewyDialogue() {
-  chewyTextEl.textContent =
-    chewyPhrases[Math.floor(Math.random() * chewyPhrases.length)];
-}
+
 
 // function render(){
 //     trn
@@ -366,4 +406,4 @@ function chewyDialogue() {
 
 // function endGame(){
 
-// }
+    }
