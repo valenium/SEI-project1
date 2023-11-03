@@ -881,9 +881,11 @@ function continueGame() {
 }
 
 function endGame() {
-  dltTileEventListener;
-  p1DltHandlePieceEventListener;
-  p2DltHandlePieceEventListener;
+  dltTileEventListener();
+  p1DltHandlePieceEventListener();
+  p2DltHandlePieceEventListener();
+  dltKingP1AddHandlePieceEventListener()
+    dltKingP2AddHandlePieceEventListener()
   if (p1PieceEl.length == 0 && p1KingEl.length == 0) {
     chewyTextEl.innerContent = "player 1 is win";
   } else if (p2PieceEl.length == 0 && p2KingEl.length == 0) {
