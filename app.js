@@ -140,9 +140,8 @@ function handlePieceClick(e) {
     piece.style.opacity = "0.3";
     addTileEventListener();
     console.log("current piece = " + currentPiece.parentElement.dataset.value);
-  }
-  else {
-    piece.style.opacity = "0.3"
+  } else {
+    piece.style.opacity = "0.3";
   }
 }
 
@@ -198,7 +197,6 @@ function handleTileClick(e) {
         clickedTile.firstElementChild.classList.add("p1-king");
         turn = false;
         render();
-        
       } else if (currentPiece.classList.contains("p2-king")) {
         currentPiece.removeAttribute("id");
         currentPiece.classList.remove("p2-king");
@@ -216,7 +214,7 @@ function handleTileClick(e) {
         turn = true;
         render();
       } else {
-        console.log('try again');
+        console.log("try again");
       }
     }
   }
@@ -247,7 +245,10 @@ function handleTileClick(e) {
             return (enemyTile = num);
           }
         });
-        if (enemyTile.firstElementChild.classList.value === "p2-piece" || enemyTile.firstElementChild.classList.value === "p2-king") {
+        if (
+          enemyTile.firstElementChild.classList.value === "p2-piece" ||
+          enemyTile.firstElementChild.classList.value === "p2-king"
+        ) {
           console.log("eating enemy piece");
           enemyTile.firstElementChild.classList.remove("p2-piece");
           enemyTile.firstElementChild.classList.remove("p2-king");
@@ -286,7 +287,10 @@ function handleTileClick(e) {
             return (enemyTile = num);
           }
         });
-        if (enemyTile.firstElementChild.classList.value === "p2-piece" || enemyTile.firstElementChild.classList.value === "p2-king") {
+        if (
+          enemyTile.firstElementChild.classList.value === "p2-piece" ||
+          enemyTile.firstElementChild.classList.value === "p2-king"
+        ) {
           console.log("eating enemy piece");
           enemyTile.firstElementChild.classList.remove("p2-piece");
           enemyTile.firstElementChild.classList.remove("p-king");
@@ -303,190 +307,228 @@ function handleTileClick(e) {
         } else {
           enemyPieceGoneAction = false;
         }
-      }
-    } else if (turn === false && currentPiece.classList.contains("p2-piece")) {
-      if (
-        pieceOnTile == 13 ||
-        pieceOnTile == 14 ||
-        pieceOnTile == 15 ||
-        pieceOnTile == 16 ||
-        pieceOnTile == 21 ||
-        pieceOnTile == 22 ||
-        pieceOnTile == 23 ||
-        pieceOnTile == 24 ||
-        pieceOnTile == 29 ||
-        pieceOnTile == 30 ||
-        pieceOnTile == 31 ||
-        pieceOnTile == 32
+      } 
+    }else if (
+        turn === false &&
+        currentPiece.classList.contains("p2-piece")
       ) {
-        enemyPiece = Math.ceil(
-          pieceOnTile * 1 - (pieceOnTile * 1 - tileNumber * 1) / 2
-        );
-        tiles.forEach((num) => {
-          if (num.dataset.value == enemyPiece) {
-            return (enemyTile = num);
+        if (
+          pieceOnTile == 13 ||
+          pieceOnTile == 14 ||
+          pieceOnTile == 15 ||
+          pieceOnTile == 16 ||
+          pieceOnTile == 21 ||
+          pieceOnTile == 22 ||
+          pieceOnTile == 23 ||
+          pieceOnTile == 24 ||
+          pieceOnTile == 29 ||
+          pieceOnTile == 30 ||
+          pieceOnTile == 31 ||
+          pieceOnTile == 32
+        ) {
+          enemyPiece = Math.ceil(
+            pieceOnTile * 1 - (pieceOnTile * 1 - tileNumber * 1) / 2
+          );
+          tiles.forEach((num) => {
+            if (num.dataset.value == enemyPiece) {
+              return (enemyTile = num);
+            }
+          });
+          if (
+            enemyTile.firstElementChild.classList.value === "p1-piece" ||
+            enemyTile.firstElementChild.classList.value === "p1-king"
+          ) {
+            console.log("eating enemy piece");
+            enemyTile.firstElementChild.classList.remove("p1-piece");
+            enemyTile.firstElementChild.classList.remove("p1-king");
+            currentPiece.removeAttribute("id");
+            currentPiece.classList.remove("p2-piece");
+            clickedTile.firstElementChild.classList.add("p2-piece");
+            clickedTile.firstElementChild.style.opacity = "1";
+            changeScore();
+            enemyPieceGoneAction = true;
+          } else {
+            enemyPieceGoneAction = false;
           }
-        });
-        if (enemyTile.firstElementChild.classList.value === "p1-piece" || enemyTile.firstElementChild.classList.value === "p1 -king") {
-          console.log("eating enemy piece");
-          enemyTile.firstElementChild.classList.remove("p1-piece");
-          enemyTile.firstElementChild.classList.remove("p1-king");
-          currentPiece.removeAttribute("id");
-          currentPiece.classList.remove("p2-piece");
-          clickedTile.firstElementChild.classList.add("p2-piece");
-          clickedTile.firstElementChild.style.opacity = "1";
-          changeScore();
-          enemyPieceGoneAction = true;
-        } else {
-          enemyPieceGoneAction = false;
+        } else if (
+          pieceOnTile == 9 ||
+          pieceOnTile == 10 ||
+          pieceOnTile == 11 ||
+          pieceOnTile == 12 ||
+          pieceOnTile == 17 ||
+          pieceOnTile == 18 ||
+          pieceOnTile == 19 ||
+          pieceOnTile == 20 ||
+          pieceOnTile == 25 ||
+          pieceOnTile == 26 ||
+          pieceOnTile == 27 ||
+          pieceOnTile == 28
+        ) {
+          enemyPiece = Math.floor(
+            tileNumber * 1 + (pieceOnTile * 1 - tileNumber * 1) / 2
+          );
+          tiles.forEach((num) => {
+            if (num.dataset.value == enemyPiece) {
+              return (enemyTile = num);
+            }
+          });
+          if (
+            enemyTile.firstElementChild.classList.value === "p1-piece" ||
+            enemyTile.firstElementChild.classList.value === "p1-king"
+          ) {
+            console.log("eating enemy piece");
+            enemyTile.firstElementChild.classList.remove("p1-piece");
+            enemyTile.firstElementChild.classList.remove("p1-king");
+            currentPiece.removeAttribute("id");
+            currentPiece.classList.remove("p2-piece");
+            clickedTile.firstElementChild.classList.add("p2-piece");
+            clickedTile.firstElementChild.style.opacity = "1";
+            changeScore();
+            enemyPieceGoneAction = true;
+          } else {
+            enemyPieceGoneAction = false;
+          }
         }
       } else if (
-        pieceOnTile == 9 ||
-        pieceOnTile == 10 ||
-        pieceOnTile == 11 ||
-        pieceOnTile == 12 ||
-        pieceOnTile == 17 ||
-        pieceOnTile == 18 ||
-        pieceOnTile == 19 ||
-        pieceOnTile == 20 ||
-        pieceOnTile == 25 ||
-        pieceOnTile == 26 ||
-        pieceOnTile == 27 ||
-        pieceOnTile == 28
+        currentPiece.classList.contains("p1-king") ||
+        currentPiece.classList.contains("p2-king")
       ) {
-        enemyPiece = Math.floor(
-          tileNumber * 1 + (pieceOnTile * 1 - tileNumber * 1) / 2
-        );
-        tiles.forEach((num) => {
-          if (num.dataset.value == enemyPiece) {
-            return (enemyTile = num);
+        if (
+          pieceOnTile == 5 ||
+          pieceOnTile == 6 ||
+          pieceOnTile == 7 ||
+          pieceOnTile == 8 ||
+          pieceOnTile == 13 ||
+          pieceOnTile == 14 ||
+          pieceOnTile == 15 ||
+          pieceOnTile == 16 ||
+          pieceOnTile == 21 ||
+          pieceOnTile == 22 ||
+          pieceOnTile == 23 ||
+          pieceOnTile == 24
+        ) {
+          enemyPiece = Math.ceil(
+            pieceOnTile * 1 + (tileNumber * 1 - pieceOnTile * 1) / 2
+          );
+          tiles.forEach((num) => {
+            if (num.dataset.value == enemyPiece) {
+              return (enemyTile = num);
+            }
+          });
+          if (
+            enemyTile.firstElementChild.classList.value === "p1-king" ||
+            enemyTile.firstElementChild.classList.value === "p1-piece"
+          ) {
+            p2ActionRemovePiece();
+          } else if (
+            enemyTile.firstElementChild.classList.value === "p2-king" ||
+            enemyTile.firstElementChild.classList.value === "p2-piece"
+          ) {
+            p1ActionRemovePiece();
           }
-        });
-        if (enemyTile.firstElementChild.classList.value === "p1-piece" || enemyTile.firstElementChild.classList.value === "p1-king") {
-          console.log("eating enemy piece");
-          enemyTile.firstElementChild.classList.remove("p1-piece");
-          enemyTile.firstElementChild.classList.remove("p1-king");
-          currentPiece.removeAttribute("id");
-          currentPiece.classList.remove("p2-piece");
-          clickedTile.firstElementChild.classList.add("p2-piece");
-          clickedTile.firstElementChild.style.opacity = "1";
-          changeScore();
-          enemyPieceGoneAction = true;
-        } else {
-          enemyPieceGoneAction = false;
+        } else if (
+          pieceOnTile == 9 ||
+          pieceOnTile == 10 ||
+          pieceOnTile == 11 ||
+          pieceOnTile == 12 ||
+          pieceOnTile == 17 ||
+          pieceOnTile == 18 ||
+          pieceOnTile == 19 ||
+          pieceOnTile == 20 ||
+          pieceOnTile == 25 ||
+          pieceOnTile == 26 ||
+          pieceOnTile == 27 ||
+          pieceOnTile == 28
+        ) {
+          enemyPiece = Math.floor(
+            tileNumber * 1 + (pieceOnTile * 1 - tileNumber * 1) / 2
+          );
+          tiles.forEach((num) => {
+            if (num.dataset.value == enemyPiece) {
+              return (enemyTile = num);
+            }
+          });
+          if (
+            enemyTile.firstElementChild.classList.value === "p1-king" ||
+            enemyTile.firstElementChild.classList.value === "p1-piece"
+          ) {
+            p2ActionRemovePiece();
+          } else if (
+            enemyTile.firstElementChild.classList.value === "p2-king" ||
+            enemyTile.firstElementChild.classList.value === "p2-piece"
+          ) {
+            p1ActionRemovePiece();
+          }
+        } else if (
+          pieceOnTile == 13 ||
+          pieceOnTile == 14 ||
+          pieceOnTile == 15 ||
+          pieceOnTile == 16 ||
+          pieceOnTile == 21 ||
+          pieceOnTile == 22 ||
+          pieceOnTile == 23 ||
+          pieceOnTile == 24 ||
+          pieceOnTile == 29 ||
+          pieceOnTile == 30 ||
+          pieceOnTile == 31 ||
+          pieceOnTile == 32
+        ) {
+          enemyPiece = Math.ceil(
+            pieceOnTile * 1 - (pieceOnTile * 1 - tileNumber * 1) / 2
+          );
+          tiles.forEach((num) => {
+            if (num.dataset.value == enemyPiece) {
+              return (enemyTile = num);
+            }
+          });
+          if (
+            enemyTile.firstElementChild.classList.value === "p1-king" ||
+            enemyTile.firstElementChild.classList.value === "p1-piece"
+          ) {
+            p2ActionRemovePiece();
+          } else if (
+            enemyTile.firstElementChild.classList.value === "p2-king" ||
+            enemyTile.firstElementChild.classList.value === "p2-piece"
+          ) {
+            p1ActionRemovePiece();
+          }
+        } else if (
+          pieceOnTile == 1 ||
+          pieceOnTile == 2 ||
+          pieceOnTile == 3 ||
+          pieceOnTile == 4 ||
+          pieceOnTile == 9 ||
+          pieceOnTile == 10 ||
+          pieceOnTile == 11 ||
+          pieceOnTile == 12 ||
+          pieceOnTile == 17 ||
+          pieceOnTile == 18 ||
+          pieceOnTile == 19 ||
+          pieceOnTile == 20
+        ) {
+          enemyPiece = Math.floor(
+            pieceOnTile * 1 + (tileNumber * 1 - pieceOnTile * 1) / 2
+          );
+          tiles.forEach((num) => {
+            if (num.dataset.value == enemyPiece) {
+              return (enemyTile = num);
+            }
+          });
+          if (
+            enemyTile.firstElementChild.classList.value === "p1-king" ||
+            enemyTile.firstElementChild.classList.value === "p1-piece"
+          ) {
+            p2ActionRemovePiece();
+          } else if (
+            enemyTile.firstElementChild.classList.value === "p2-king" ||
+            enemyTile.firstElementChild.classList.value === "p2-piece"
+          ) {
+            p1ActionRemovePiece();
+          }
         }
       }
-    } else if (currentPiece.classList.contains("p1-king") || currentPiece.classList.contains("p2-king")) {
-      if (
-        pieceOnTile == 5 ||
-        pieceOnTile == 6 ||
-        pieceOnTile == 7 ||
-        pieceOnTile == 8 ||
-        pieceOnTile == 13 ||
-        pieceOnTile == 14 ||
-        pieceOnTile == 15 ||
-        pieceOnTile == 16 ||
-        pieceOnTile == 21 ||
-        pieceOnTile == 22 ||
-        pieceOnTile == 23 ||
-        pieceOnTile == 24
-      ) {
-        enemyPiece = Math.ceil(
-          pieceOnTile * 1 + (tileNumber * 1 - pieceOnTile * 1) / 2
-        );
-        tiles.forEach((num) => {
-          if (num.dataset.value == enemyPiece) {
-            return (enemyTile = num);
-          }
-        });
-        if (enemyTile.firstElementChild.classList.value === "p1-king" || enemyTile.firstElementChild.classList.value==="p1-piece") {
-          p2ActionRemovePiece()
-        } else if (enemyTile.firstElementChild.classList.value === "p2-king" || enemyTile.firstElementChild.classList.value === "p2-piece") {
-          p1ActionRemovePiece()
-        }
-      }
-      else if (
-      pieceOnTile == 9 ||
-      pieceOnTile == 10 ||
-      pieceOnTile == 11 ||
-      pieceOnTile == 12 ||
-      pieceOnTile == 17 ||
-      pieceOnTile == 18 ||
-      pieceOnTile == 19 ||
-      pieceOnTile == 20 ||
-      pieceOnTile == 25 ||
-      pieceOnTile == 26 ||
-      pieceOnTile == 27 ||
-      pieceOnTile == 28
-    ) {
-      enemyPiece = Math.floor(
-        tileNumber * 1 + (pieceOnTile * 1 - tileNumber * 1) / 2
-      );
-      tiles.forEach((num) => {
-        if (num.dataset.value == enemyPiece) {
-          return (enemyTile = num);
-        }
-      });
-      if (enemyTile.firstElementChild.classList.value === "p1-king" || enemyTile.firstElementChild.classList.value==="p1-piece") {
-        p2ActionRemovePiece()
-      } else if (enemyTile.firstElementChild.classList.value === "p2-king" || enemyTile.firstElementChild.classList.value === "p2-piece") {
-        p1ActionRemovePiece()
-      }
-    } else if (
-      pieceOnTile == 13 ||
-        pieceOnTile == 14 ||
-        pieceOnTile == 15 ||
-        pieceOnTile == 16 ||
-        pieceOnTile == 21 ||
-        pieceOnTile == 22 ||
-        pieceOnTile == 23 ||
-        pieceOnTile == 24 ||
-        pieceOnTile == 29 ||
-        pieceOnTile == 30 ||
-        pieceOnTile == 31 ||
-        pieceOnTile == 32
-      ) {
-        enemyPiece = Math.ceil(
-          pieceOnTile * 1 - (pieceOnTile * 1 - tileNumber * 1) / 2
-        );
-        tiles.forEach((num) => {
-          if (num.dataset.value == enemyPiece) {
-            return (enemyTile = num);
-          }
-        });
-        if (enemyTile.firstElementChild.classList.value === "p1-king" || enemyTile.firstElementChild.classList.value==="p1-piece") {
-          p2ActionRemovePiece()
-        } else if (enemyTile.firstElementChild.classList.value === "p2-king" || enemyTile.firstElementChild.classList.value === "p2-piece") {
-          p1ActionRemovePiece()
-        }
-      } else if (
-        pieceOnTile == 1 ||
-        pieceOnTile == 2 ||
-        pieceOnTile == 3 ||
-        pieceOnTile == 4 ||
-        pieceOnTile == 9 ||
-        pieceOnTile == 10 ||
-        pieceOnTile == 11 ||
-        pieceOnTile == 12 ||
-        pieceOnTile == 17 ||
-        pieceOnTile == 18 ||
-        pieceOnTile == 19 ||
-        pieceOnTile == 20
-      ) {
-        enemyPiece = Math.floor(
-          pieceOnTile * 1 + (tileNumber * 1 - pieceOnTile * 1) / 2
-        );
-        tiles.forEach((num) => {
-          if (num.dataset.value == enemyPiece) {
-            return (enemyTile = num);
-          }
-        });
-        if (enemyTile.firstElementChild.classList.value === "p1-king" || enemyTile.firstElementChild.classList.value==="p1-piece") {
-          p2ActionRemovePiece()
-        } else if (enemyTile.firstElementChild.classList.value === "p2-king" || enemyTile.firstElementChild.classList.value === "p2-piece") {
-          p1ActionRemovePiece()
-        }
-  }}}
+    }
+  
 
   function validMove() {
     let tileDifference = pieceOnTile - tileNumber;
@@ -605,8 +647,9 @@ function handleTileClick(e) {
         tileDifference === -7 ||
         tileDifference === 9 ||
         tileDifference === 7
-      )
+      ) {
         removeEnemyPiece = true;
+      }
     } else if (turn === true) {
       if (
         (pieceOnTile === "1" && tileNumber === "5") ||
@@ -751,20 +794,10 @@ function handleTileClick(e) {
           tileNumber == 4
         ) {
           isKing = true;
+        } else {
+          p1ValidMove = false;
         }
-      } else {
-        p1ValidMove = false;
       }
-      //   } else if (
-      //         (turn === true && (tileDifference === -9 || tileDifference === -7)) ||
-      //         (turn === false && (tileDifference === 7 || tileDifference === 9))) {
-      //           removeEnemyPiece = true
-      //         //   p2ValidMove = false
-      //         //   p1ValidMove = false
-      //         //   console.log(tileDifference/2)
-      //           console.log('removeEnemyPiece = '+removeEnemyPiece)
-      //       } else {
-      //         removeEnemyPiece = false
     }
   }
 
@@ -772,12 +805,12 @@ function handleTileClick(e) {
     currentPiece.removeAttribute("id");
     currentPiece.classList.remove("p1-king");
     clickedTile.firstElementChild.classList.add("p1-king");
-    clickedTile.firstElementChild.style.opacity = "1";    
+    clickedTile.firstElementChild.style.opacity = "1";
     changeScore();
     enemyPieceGoneAction = true;
-    if (enemyTile.firstElementChild.classList.value === "p2-king"){
-      enemyTile.firstElementChild.classList.remove("p2-king")
-    } else if (enemyTile.firstElementChild.classList.value === "p2-piece"){
+    if (enemyTile.firstElementChild.classList.value === "p2-king") {
+      enemyTile.firstElementChild.classList.remove("p2-king");
+    } else if (enemyTile.firstElementChild.classList.value === "p2-piece") {
       enemyTile.firstElementChild.classList.remove("p2-piece");
     }
   }
@@ -786,12 +819,12 @@ function handleTileClick(e) {
     currentPiece.removeAttribute("id");
     currentPiece.classList.remove("p2-king");
     clickedTile.firstElementChild.classList.add("p2-king");
-    clickedTile.firstElementChild.style.opacity = "1";    
+    clickedTile.firstElementChild.style.opacity = "1";
     changeScore();
     enemyPieceGoneAction = true;
-    if (enemyTile.firstElementChild.classList.value === "p1-king"){
-      enemyTile.firstElementChild.classList.remove("p1-king")
-    } else if (enemyTile.firstElementChild.classList.value === "p1-piece"){
+    if (enemyTile.firstElementChild.classList.value === "p1-king") {
+      enemyTile.firstElementChild.classList.remove("p1-king");
+    } else if (enemyTile.firstElementChild.classList.value === "p1-piece") {
       enemyTile.firstElementChild.classList.remove("p1-piece");
     }
   }
@@ -884,8 +917,8 @@ function endGame() {
   dltTileEventListener();
   p1DltHandlePieceEventListener();
   p2DltHandlePieceEventListener();
-  dltKingP1AddHandlePieceEventListener()
-    dltKingP2AddHandlePieceEventListener()
+  dltKingP1AddHandlePieceEventListener();
+  dltKingP2AddHandlePieceEventListener();
   if (p1PieceEl.length == 0 && p1KingEl.length == 0) {
     chewyTextEl.innerContent = "player 1 is win";
   } else if (p2PieceEl.length == 0 && p2KingEl.length == 0) {
