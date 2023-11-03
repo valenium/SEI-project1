@@ -9,13 +9,13 @@ BUT... this is no regular game of checkers... this is Chewy Checkers. In additio
 
 # Gameplay
 Beginning of the game
-![AltText](planning/gameplay1.jpg)
+![AltText](planning/gameplay1.png)
 
 Some action
-![AltText](planning/gameplay2.jpg)
+![AltText](planning/gameplay2.png)
 
 End game
-![AltText](planning/gameplay3.jpg)
+![AltText](planning/gameplay3.png)
 
 # Technologies used
 - HTML
