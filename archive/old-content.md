@@ -85,3 +85,27 @@ NULLgt FUNCTIONS
 //     p2TextEl.style.opacity = "1";
 //   }
 // }
+
+OLD IF STATEMENT FROM THE HANDLE PIECE CLICK FUNCTION  
+  // if (
+  //   (turn === true && piece.id === "p2-piece") ||
+  //   (turn === false && piece.id === "p1-piece")
+  //   // currentPiece !== null
+  // ) {
+  //   // Icebox - needs P2 event listener to be on but can live without it :)
+  //   chewyTextEl.textContent = "not your turn! >:(";
+  //   piece.style.opacity = "1";
+  //   // currentPiece = null;
+  //   p1PieceEl.forEach(function (element) {
+  //     element.style.opacity = "1";
+  //   });
+  //   p2PieceEl.forEach(function (element) {
+  //     element.style.opacity = "1";
+  //   });
+  //   console.log(currentPiece);
+  // return;
+  //   } if (currentPiece === piece) {
+  //     chewyTextEl.textContent = chewyPhrases[0];
+  //     piece.style.opacity = "1";
+  //     currentPiece = null;
+  //     console.log(currentPiece)
