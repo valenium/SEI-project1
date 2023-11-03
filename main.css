@@ -103,9 +103,8 @@ main{
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    border: 1px solid black;
+    border: 2px solid black;
     background-image: url(board-images/chewy-piece1.jpg);
-    /* justify-self: center; */
     margin: 0;
 }
 
@@ -118,9 +117,23 @@ main{
     margin: 0;
 }
 
-/* p:hover{
-    opacity: 0.3;
-} */
+.p1-king{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid black;
+    background-image: url(board-images/chewy-king1.jpg);
+    margin: 0;
+}
+
+.p2-king{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background-image: url(board-images/chewy-king2.jpg);
+    margin: 0;
+}
 
 .dialogue-box{
     display: flex;

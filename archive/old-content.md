@@ -63,7 +63,7 @@ Code from the validMove() function
     //             p2ValidMove = false
     //         }
 
-NULL FUNCTIONS
+NULLgt FUNCTIONS
 // function playerTurn(){
 //     if (turn === true){
 //         for (let i=0;i<p1PieceEl.length; i++){
