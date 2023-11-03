@@ -141,6 +141,9 @@ function handlePieceClick(e) {
     addTileEventListener();
     console.log("current piece = " + currentPiece.parentElement.dataset.value);
   }
+  else {
+    piece.style.opacity = "0.3"
+  }
 }
 
 // To move selected piece to tile
@@ -195,6 +198,7 @@ function handleTileClick(e) {
         clickedTile.firstElementChild.classList.add("p1-king");
         turn = false;
         render();
+        
       } else if (currentPiece.classList.contains("p2-king")) {
         currentPiece.removeAttribute("id");
         currentPiece.classList.remove("p2-king");
@@ -825,20 +829,20 @@ function render() {
 function switchTurn() {
   if (turn === false) {
     p1DltHandlePieceEventListener();
-    dltKingP1AddHandlePieceEventListener;
+    dltKingP1AddHandlePieceEventListener();
     dltTileEventListener();
     p1TextEl.style.opacity = "0.3";
     p2TextEl.style.opacity = "1";
     p2AddHandlePieceEventListener();
-    kingP2AddHandlePieceEventListener;
+    kingP2AddHandlePieceEventListener();
   } else if (turn === true) {
     p2DltHandlePieceEventListener();
-    dltKingP2AddHandlePieceEventListener;
+    dltKingP2AddHandlePieceEventListener();
     dltTileEventListener();
     p1TextEl.style.opacity = "1";
     p2TextEl.style.opacity = "0.3";
     p1AddHandlePieceEventListener();
-    kingP1AddHandlePieceEventListener;
+    kingP1AddHandlePieceEventListener();
   }
 }
 
