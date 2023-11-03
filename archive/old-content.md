@@ -62,3 +62,26 @@ Code from the validMove() function
     //         }else{
     //             p2ValidMove = false
     //         }
+
+NULL FUNCTIONS
+// function playerTurn(){
+//     if (turn === true){
+//         for (let i=0;i<p1PieceEl.length; i++){
+//             p1PieceEl[i].removeEventListener('click', handlePieceClick)
+//         }
+//         }else{
+//             for (let i=0;i<p2PieceEl.length; i++){
+//                 p2PieceEl[i].removeEventListener('click', handlePieceClick)
+//         }
+//     }
+// }
+
+// function indicatePlayerTurn() {
+//   if (turn === true) {
+//     p1TextEl.style.opacity = "1";
+//     p2TextEl.style.opacity = "0.3";
+//   } else if (turn === false) {
+//     p1TextEl.style.opacity = "0.3";
+//     p2TextEl.style.opacity = "1";
+//   }
+// }

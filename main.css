@@ -5,14 +5,24 @@
     border: 1px solid red;
 }
 
+header {
+    display: flex;
+    justify-content: center;
+    
+    opacity: 0.9;
+}
+
 h1{
     font-family: 'Anton', sans-serif;
     font-size: 45px;
     text-align: center;
     background-color: #846934;
     padding: 1.5rem;
-    margin: 0 0 1rem 0;
+    margin: 1rem 0 1rem 0;
     color: white;
+    width: 40%;
+    border-radius: 20%;
+    border: 1px solid black;
 }
 
 body{
