@@ -1,4 +1,5 @@
 # Chewy Checkers
+Play here: https://valenium.github.io/SEI-project1/
 
 # Description
 Welcome to Chewy Checkers! This is a two player game played on a single browser, where each will take a turn one after another. The objective of the game is to capture all of the other player's pieces, and whoever is the last remaining wins! 
