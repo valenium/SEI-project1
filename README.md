@@ -8,7 +8,14 @@ Each player will begin with 12 pieces, which they can move diagonally on the dar
 BUT... this is no regular game of checkers... this is Chewy Checkers. In addition to being doge themed, Chewy will be judging your every move with mildly condescending comments until it witnesses the demise of one side.
 
 # Gameplay
+Beginning of the game
+![AltText](planning/gameplay1.jpg)
 
+Some action
+![AltText](planning/gameplay2.jpg)
+
+End game
+![AltText](planning/gameplay3.jpg)
 
 # Technologies used
 - HTML
@@ -25,4 +32,4 @@ Rules:
 - Players can only move pieces forward and diagonally, on the dark squares
 - Players can move their pieces over their opponents pieces to capture them and permanently remove them from play
 - If a player is able to move one of their pieces to the opposite end of their board, that piece becomes a king and is now able to move backwards
-- Once a player is able to capture all of their opponent's pieces, the game is over and the player with pieces remaining on the board is the inner
+- Once a player is able to capture all of their opponent's pieces, the game is over and the player with pieces remaining on the board is the winner
