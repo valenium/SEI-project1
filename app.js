@@ -41,12 +41,14 @@ let tileNumber;
 let isEnemyPiece;
 let removeEnemyPiece;
 let enemyPieceGoneAction;
+let isKing;
 
 /*----- cached elements  -----*/
 
 // Game board tiles
 const tiles = document.querySelectorAll("#tile");
 
+// Assigns tile pieces a value from the board variable
 tiles.forEach((tile, index) => {
   const row = Math.floor(index / 8);
   const col = index % 8;
@@ -56,6 +58,9 @@ tiles.forEach((tile, index) => {
 // Play pieces
 let p1PieceEl = document.querySelectorAll(".p1-piece");
 let p2PieceEl = document.querySelectorAll(".p2-piece");
+
+let p1KingEl = document.querySelectorAll(".p1-king");
+let p2KingEl = document.querySelectorAll(".p2-king");
 
 // Dialogue/stat box
 const p1TextEl = document.querySelector("#player1-prompt");
@@ -94,6 +99,26 @@ const addTileEventListener = () =>
 const dltTileEventListener = () =>
   tiles.forEach((place) => place.removeEventListener("click", handleTileClick));
 
+// P1 king piece piece handle
+const kingP1AddHandlePieceEventListener = () =>
+  p1KingEl.forEach((move) => move.addEventListener("click", handlePieceClick));
+
+// P1 king piece piece handle
+const kingP2AddHandlePieceEventListener = () =>
+  p2KingEl.forEach((move) => move.addEventListener("click", handlePieceClick));
+
+// Delete P1 king piece handle
+const dltKingP1AddHandlePieceEventListener = () =>
+  p1KingEl.forEach((move) =>
+    move.removeEventListener("click", handlePieceClick)
+  );
+
+// Delete P2 king piece piece handle
+const dltKingP2AddHandlePieceEventListener = () =>
+  p2KingEl.forEach((move) =>
+    move.removeEventListener("click", handlePieceClick)
+  );
+
 // for loop that iterates through the board variable and ties it's values to the tiless
 for (let i = 0; i < tiles.length; i++) {
   const tile = tiles[i];
@@ -107,29 +132,6 @@ function handlePieceClick(e) {
   e.preventDefault();
   let piece = e.target;
   tileOfPiece = piece.parentElement;
-  if (
-    (turn === true && piece.id === "p2-piece") ||
-    (turn === false && piece.id === "p1-piece")
-    // currentPiece !== null
-  ) {
-    // Icebox - needs P2 event listener to be on but can live without it :)
-    chewyTextEl.textContent = "not your turn! >:(";
-    piece.style.opacity = "1";
-    // currentPiece = null;
-    p1PieceEl.forEach(function (element) {
-      element.style.opacity = "1";
-    });
-    p2PieceEl.forEach(function (element) {
-      element.style.opacity = "1";
-    });
-    console.log(currentPiece);
-    // return;
-    //   } if (currentPiece === piece) {
-    //     chewyTextEl.textContent = chewyPhrases[0];
-    //     piece.style.opacity = "1";
-    //     currentPiece = null;
-    //     console.log(currentPiece)
-  }
   if (currentPiece) {
     currentPiece.style.opacity = "1";
   }
@@ -149,30 +151,54 @@ function handleTileClick(e) {
   // stores the tile number of the piece that player has clicked
   pieceOnTile = currentPiece.parentElement.dataset.value;
   if (tileNumber === undefined) {
-    // console.log("waiting for tile to be selected");
+    console.log("waiting for tile to be selected");
+    // prevents code from running unless a tile has been selected
   } else {
     validMove();
     // checks if there is a piece currently on tile being moved to
     if (
       clickedTile.firstElementChild.classList.contains("p1-piece") ||
-      clickedTile.firstElementChild.classList.contains("p2-piece")
+      clickedTile.firstElementChild.classList.contains("p2-piece") ||
+      clickedTile.firstElementChild.classList.contains("p1-king") ||
+      clickedTile.firstElementChild.classList.contains("p2-king")
     ) {
       validMove();
-      chewyTextEl.textContent = "invalid move";
+      // if the move has been determined as a valid move
     } else if (p1ValidMove === true || p2ValidMove === true) {
       console.log("moved piece to " + tileNumber);
       if (currentPiece.classList.contains("p1-piece")) {
-        console.log("regular move is valid");
+        // action taken to move a P1 piece
         currentPiece.removeAttribute("id");
         currentPiece.classList.remove("p1-piece");
         clickedTile.firstElementChild.classList.add("p1-piece");
+        if (isKing === true) {
+          clickedTile.firstElementChild.classList.remove("p1-piece");
+          clickedTile.firstElementChild.classList.add("p1-king");
+        }
         turn = false;
         render();
       } else if (currentPiece.classList.contains("p2-piece")) {
-        console.log("regular move is valid");
+        // action taken to move a P2 piece
         currentPiece.removeAttribute("id");
         currentPiece.classList.remove("p2-piece");
         clickedTile.firstElementChild.classList.add("p2-piece");
+        if (isKing === true) {
+          clickedTile.firstElementChild.classList.remove("p2-piece");
+          clickedTile.firstElementChild.classList.add("p2-king");
+        }
+        turn = true;
+        render();
+        // action taken to move a P1 king piece
+      } else if (currentPiece.classList.contains("p1-king")) {
+        currentPiece.removeAttribute("id");
+        currentPiece.classList.remove("p1-king");
+        clickedTile.firstElementChild.classList.add("p1-king");
+        turn = false;
+        render();
+      } else if (currentPiece.classList.contains("p2-king")) {
+        currentPiece.removeAttribute("id");
+        currentPiece.classList.remove("p2-king");
+        clickedTile.firstElementChild.classList.add("p2-king");
         turn = true;
         render();
       }
@@ -186,18 +212,15 @@ function handleTileClick(e) {
         turn = true;
         render();
       } else {
-        return;
+        console.log('try again');
       }
-      // ICEBOX - double jump feature
-      //   if (currentPiece !== null) {
-      //   }
     }
   }
 
   function determineIfEnemyPiece() {
     console.log("piece on tile" + pieceOnTile + " tile number" + tileNumber);
     let enemyPiece;
-    if (turn === true) {
+    if (turn === true && currentPiece.classList.contains("p1-piece")) {
       if (
         pieceOnTile == 5 ||
         pieceOnTile == 6 ||
@@ -215,20 +238,23 @@ function handleTileClick(e) {
         enemyPiece = Math.ceil(
           pieceOnTile * 1 + (tileNumber * 1 - pieceOnTile * 1) / 2
         );
-        console.log(enemyPiece);
-        console.dir(tiles);
         tiles.forEach((num) => {
           if (num.dataset.value == enemyPiece) {
             return (enemyTile = num);
           }
         });
-        if (enemyTile.firstElementChild.classList.value === "p2-piece") {
+        if (enemyTile.firstElementChild.classList.value === "p2-piece" || enemyTile.firstElementChild.classList.value === "p2-king") {
           console.log("eating enemy piece");
           enemyTile.firstElementChild.classList.remove("p2-piece");
+          enemyTile.firstElementChild.classList.remove("p2-king");
           currentPiece.removeAttribute("id");
           currentPiece.classList.remove("p1-piece");
           clickedTile.firstElementChild.classList.add("p1-piece");
           clickedTile.firstElementChild.style.opacity = "1";
+          if (isKing === true) {
+            clickedTile.firstElementChild.classList.remove("p1-piece");
+            clickedTile.firstElementChild.classList.add("p1-king");
+          }
           changeScore();
           enemyPieceGoneAction = true;
         } else {
@@ -246,33 +272,35 @@ function handleTileClick(e) {
         pieceOnTile == 17 ||
         pieceOnTile == 18 ||
         pieceOnTile == 19 ||
-        pieceOnTile == 20 
+        pieceOnTile == 20
       ) {
         enemyPiece = Math.floor(
           pieceOnTile * 1 + (tileNumber * 1 - pieceOnTile * 1) / 2
         );
-        console.log(enemyPiece);
-        console.dir(tiles);
         tiles.forEach((num) => {
           if (num.dataset.value == enemyPiece) {
             return (enemyTile = num);
           }
         });
-        if (enemyTile.firstElementChild.classList.value === "p2-piece") {
+        if (enemyTile.firstElementChild.classList.value === "p2-piece" || enemyTile.firstElementChild.classList.value === "p2-king") {
           console.log("eating enemy piece");
           enemyTile.firstElementChild.classList.remove("p2-piece");
+          enemyTile.firstElementChild.classList.remove("p-king");
           currentPiece.removeAttribute("id");
           currentPiece.classList.remove("p1-piece");
           clickedTile.firstElementChild.classList.add("p1-piece");
           clickedTile.firstElementChild.style.opacity = "1";
+          if (isKing === true) {
+            clickedTile.firstElementChild.classList.remove("p2-piece");
+            clickedTile.firstElementChild.classList.add("p2-king");
+          }
           changeScore();
           enemyPieceGoneAction = true;
         } else {
           enemyPieceGoneAction = false;
         }
       }
-    }
-    if (turn === false) {
+    } else if (turn === false && currentPiece.classList.contains("p2-piece")) {
       if (
         pieceOnTile == 13 ||
         pieceOnTile == 14 ||
@@ -295,9 +323,10 @@ function handleTileClick(e) {
             return (enemyTile = num);
           }
         });
-        if (enemyTile.firstElementChild.classList.value === "p1-piece") {
+        if (enemyTile.firstElementChild.classList.value === "p1-piece" || enemyTile.firstElementChild.classList.value === "p1 -king") {
           console.log("eating enemy piece");
           enemyTile.firstElementChild.classList.remove("p1-piece");
+          enemyTile.firstElementChild.classList.remove("p1-king");
           currentPiece.removeAttribute("id");
           currentPiece.classList.remove("p2-piece");
           clickedTile.firstElementChild.classList.add("p2-piece");
@@ -319,21 +348,20 @@ function handleTileClick(e) {
         pieceOnTile == 25 ||
         pieceOnTile == 26 ||
         pieceOnTile == 27 ||
-        pieceOnTile == 28 
+        pieceOnTile == 28
       ) {
         enemyPiece = Math.floor(
           tileNumber * 1 + (pieceOnTile * 1 - tileNumber * 1) / 2
         );
-        console.log(enemyPiece);
-        console.dir(tiles);
         tiles.forEach((num) => {
           if (num.dataset.value == enemyPiece) {
             return (enemyTile = num);
           }
         });
-        if (enemyTile.firstElementChild.classList.value === "p1-piece") {
+        if (enemyTile.firstElementChild.classList.value === "p1-piece" || enemyTile.firstElementChild.classList.value === "p1-king") {
           console.log("eating enemy piece");
           enemyTile.firstElementChild.classList.remove("p1-piece");
+          enemyTile.firstElementChild.classList.remove("p1-king");
           currentPiece.removeAttribute("id");
           currentPiece.classList.remove("p2-piece");
           clickedTile.firstElementChild.classList.add("p2-piece");
@@ -344,12 +372,425 @@ function handleTileClick(e) {
           enemyPieceGoneAction = false;
         }
       }
+    } else if (currentPiece.classList.contains("p1-king") || currentPiece.classList.contains("p2-king")) {
+      if (
+        pieceOnTile == 5 ||
+        pieceOnTile == 6 ||
+        pieceOnTile == 7 ||
+        pieceOnTile == 8 ||
+        pieceOnTile == 13 ||
+        pieceOnTile == 14 ||
+        pieceOnTile == 15 ||
+        pieceOnTile == 16 ||
+        pieceOnTile == 21 ||
+        pieceOnTile == 22 ||
+        pieceOnTile == 23 ||
+        pieceOnTile == 24
+      ) {
+        enemyPiece = Math.ceil(
+          pieceOnTile * 1 + (tileNumber * 1 - pieceOnTile * 1) / 2
+        );
+        tiles.forEach((num) => {
+          if (num.dataset.value == enemyPiece) {
+            return (enemyTile = num);
+          }
+        });
+        if (enemyTile.firstElementChild.classList.value === "p1-king" || enemyTile.firstElementChild.classList.value==="p1-piece") {
+          p2ActionRemovePiece()
+        } else if (enemyTile.firstElementChild.classList.value === "p2-king" || enemyTile.firstElementChild.classList.value === "p2-piece") {
+          p1ActionRemovePiece()
+        }
+      }
+      else if (
+      pieceOnTile == 9 ||
+      pieceOnTile == 10 ||
+      pieceOnTile == 11 ||
+      pieceOnTile == 12 ||
+      pieceOnTile == 17 ||
+      pieceOnTile == 18 ||
+      pieceOnTile == 19 ||
+      pieceOnTile == 20 ||
+      pieceOnTile == 25 ||
+      pieceOnTile == 26 ||
+      pieceOnTile == 27 ||
+      pieceOnTile == 28
+    ) {
+      enemyPiece = Math.floor(
+        tileNumber * 1 + (pieceOnTile * 1 - tileNumber * 1) / 2
+      );
+      tiles.forEach((num) => {
+        if (num.dataset.value == enemyPiece) {
+          return (enemyTile = num);
+        }
+      });
+      if (enemyTile.firstElementChild.classList.value === "p1-king" || enemyTile.firstElementChild.classList.value==="p1-piece") {
+        p2ActionRemovePiece()
+      } else if (enemyTile.firstElementChild.classList.value === "p2-king" || enemyTile.firstElementChild.classList.value === "p2-piece") {
+        p1ActionRemovePiece()
+      }
+    } else if (
+      pieceOnTile == 13 ||
+        pieceOnTile == 14 ||
+        pieceOnTile == 15 ||
+        pieceOnTile == 16 ||
+        pieceOnTile == 21 ||
+        pieceOnTile == 22 ||
+        pieceOnTile == 23 ||
+        pieceOnTile == 24 ||
+        pieceOnTile == 29 ||
+        pieceOnTile == 30 ||
+        pieceOnTile == 31 ||
+        pieceOnTile == 32
+      ) {
+        enemyPiece = Math.ceil(
+          pieceOnTile * 1 - (pieceOnTile * 1 - tileNumber * 1) / 2
+        );
+        tiles.forEach((num) => {
+          if (num.dataset.value == enemyPiece) {
+            return (enemyTile = num);
+          }
+        });
+        if (enemyTile.firstElementChild.classList.value === "p1-king" || enemyTile.firstElementChild.classList.value==="p1-piece") {
+          p2ActionRemovePiece()
+        } else if (enemyTile.firstElementChild.classList.value === "p2-king" || enemyTile.firstElementChild.classList.value === "p2-piece") {
+          p1ActionRemovePiece()
+        }
+      } else if (
+        pieceOnTile == 1 ||
+        pieceOnTile == 2 ||
+        pieceOnTile == 3 ||
+        pieceOnTile == 4 ||
+        pieceOnTile == 9 ||
+        pieceOnTile == 10 ||
+        pieceOnTile == 11 ||
+        pieceOnTile == 12 ||
+        pieceOnTile == 17 ||
+        pieceOnTile == 18 ||
+        pieceOnTile == 19 ||
+        pieceOnTile == 20
+      ) {
+        enemyPiece = Math.floor(
+          pieceOnTile * 1 + (tileNumber * 1 - pieceOnTile * 1) / 2
+        );
+        tiles.forEach((num) => {
+          if (num.dataset.value == enemyPiece) {
+            return (enemyTile = num);
+          }
+        });
+        if (enemyTile.firstElementChild.classList.value === "p1-king" || enemyTile.firstElementChild.classList.value==="p1-piece") {
+          p2ActionRemovePiece()
+        } else if (enemyTile.firstElementChild.classList.value === "p2-king" || enemyTile.firstElementChild.classList.value === "p2-piece") {
+          p1ActionRemovePiece()
+        }
+  }}}
+
+  function validMove() {
+    let tileDifference = pieceOnTile - tileNumber;
+    if (
+      currentPiece.classList.contains("p1-king") ||
+      currentPiece.classList.contains("p2-king")
+    ) {
+      if (
+        (pieceOnTile === "1" && tileNumber === "5") ||
+        (pieceOnTile === "2" && tileNumber === "6") ||
+        (pieceOnTile === "2" && tileNumber === "5") ||
+        (pieceOnTile === "3" && tileNumber === "7") ||
+        (pieceOnTile === "3" && tileNumber === "6") ||
+        (pieceOnTile === "4" && tileNumber === "8") ||
+        (pieceOnTile === "4" && tileNumber === "7") ||
+        (pieceOnTile === "5" && tileNumber === "10") ||
+        (pieceOnTile === "5" && tileNumber === "9") ||
+        (pieceOnTile === "6" && tileNumber === "11") ||
+        (pieceOnTile === "6" && tileNumber === "10") ||
+        (pieceOnTile === "7" && tileNumber === "12") ||
+        (pieceOnTile === "7" && tileNumber === "11") ||
+        (pieceOnTile === "8" && tileNumber === "12") ||
+        (pieceOnTile === "9" && tileNumber === "13") ||
+        (pieceOnTile === "10" && tileNumber === "13") ||
+        (pieceOnTile === "10" && tileNumber === "14") ||
+        (pieceOnTile === "11" && tileNumber === "14") ||
+        (pieceOnTile === "11" && tileNumber === "15") ||
+        (pieceOnTile === "12" && tileNumber === "16") ||
+        (pieceOnTile === "12" && tileNumber === "15") ||
+        (pieceOnTile === "13" && tileNumber === "18") ||
+        (pieceOnTile === "13" && tileNumber === "17") ||
+        (pieceOnTile === "14" && tileNumber === "19") ||
+        (pieceOnTile === "14" && tileNumber === "18") ||
+        (pieceOnTile === "15" && tileNumber === "20") ||
+        (pieceOnTile === "15" && tileNumber === "19") ||
+        (pieceOnTile === "16" && tileNumber === "20") ||
+        (pieceOnTile === "17" && tileNumber === "22") ||
+        (pieceOnTile === "18" && tileNumber === "21") ||
+        (pieceOnTile === "18" && tileNumber === "22") ||
+        (pieceOnTile === "19" && tileNumber === "22") ||
+        (pieceOnTile === "19" && tileNumber === "23") ||
+        (pieceOnTile === "20" && tileNumber === "24") ||
+        (pieceOnTile === "21" && tileNumber === "26") ||
+        (pieceOnTile === "21" && tileNumber === "25") ||
+        (pieceOnTile === "22" && tileNumber === "27") ||
+        (pieceOnTile === "22" && tileNumber === "26") ||
+        (pieceOnTile === "23" && tileNumber === "28") ||
+        (pieceOnTile === "23" && tileNumber === "27") ||
+        (pieceOnTile === "24" && tileNumber === "28") ||
+        (pieceOnTile === "25" && tileNumber === "29") ||
+        (pieceOnTile === "26" && tileNumber === "29") ||
+        (pieceOnTile === "26" && tileNumber === "30") ||
+        (pieceOnTile === "27" && tileNumber === "30") ||
+        (pieceOnTile === "27" && tileNumber === "31") ||
+        (pieceOnTile === "28" && tileNumber === "31") ||
+        (pieceOnTile === "28" && tileNumber === "32") ||
+        (pieceOnTile === "5" && tileNumber === "2") ||
+        (pieceOnTile === "5" && tileNumber === "1") ||
+        (pieceOnTile === "6" && tileNumber === "3") ||
+        (pieceOnTile === "6" && tileNumber === "2") ||
+        (pieceOnTile === "7" && tileNumber === "4") ||
+        (pieceOnTile === "7" && tileNumber === "3") ||
+        (pieceOnTile === "8" && tileNumber === "4") ||
+        (pieceOnTile === "9" && tileNumber === "5") ||
+        (pieceOnTile === "10" && tileNumber === "5") ||
+        (pieceOnTile === "10" && tileNumber === "6") ||
+        (pieceOnTile === "11" && tileNumber === "6") ||
+        (pieceOnTile === "11" && tileNumber === "7") ||
+        (pieceOnTile === "12" && tileNumber === "7") ||
+        (pieceOnTile === "12" && tileNumber === "8") ||
+        (pieceOnTile === "13" && tileNumber === "9") ||
+        (pieceOnTile === "13" && tileNumber === "10") ||
+        (pieceOnTile === "14" && tileNumber === "10") ||
+        (pieceOnTile === "14" && tileNumber === "11") ||
+        (pieceOnTile === "15" && tileNumber === "11") ||
+        (pieceOnTile === "15" && tileNumber === "12") ||
+        (pieceOnTile === "16" && tileNumber === "12") ||
+        (pieceOnTile === "17" && tileNumber === "13") ||
+        (pieceOnTile === "18" && tileNumber === "13") ||
+        (pieceOnTile === "18" && tileNumber === "14") ||
+        (pieceOnTile === "19" && tileNumber === "15") ||
+        (pieceOnTile === "19" && tileNumber === "14") ||
+        (pieceOnTile === "20" && tileNumber === "16") ||
+        (pieceOnTile === "20" && tileNumber === "15") ||
+        (pieceOnTile === "21" && tileNumber === "17") ||
+        (pieceOnTile === "21" && tileNumber === "18") ||
+        (pieceOnTile === "22" && tileNumber === "18") ||
+        (pieceOnTile === "22" && tileNumber === "19") ||
+        (pieceOnTile === "23" && tileNumber === "19") ||
+        (pieceOnTile === "23" && tileNumber === "20") ||
+        (pieceOnTile === "24" && tileNumber === "20") ||
+        (pieceOnTile === "25" && tileNumber === "21") ||
+        (pieceOnTile === "26" && tileNumber === "22") ||
+        (pieceOnTile === "26" && tileNumber === "21") ||
+        (pieceOnTile === "27" && tileNumber === "22") ||
+        (pieceOnTile === "27" && tileNumber === "23") ||
+        (pieceOnTile === "28" && tileNumber === "23") ||
+        (pieceOnTile === "28" && tileNumber === "24") ||
+        (pieceOnTile === "29" && tileNumber === "25") ||
+        (pieceOnTile === "29" && tileNumber === "26") ||
+        (pieceOnTile === "30" && tileNumber === "26") ||
+        (pieceOnTile === "30" && tileNumber === "27") ||
+        (pieceOnTile === "31" && tileNumber === "27") ||
+        (pieceOnTile === "31" && tileNumber === "28") ||
+        (pieceOnTile === "32" && tileNumber === "28")
+      ) {
+        if (turn === true) {
+          p1ValidMove = true;
+          p2ValidMove = false;
+        } else if (turn === false) {
+          p2ValidMove = false;
+          p1ValidMove = true;
+        }
+      } else if (
+        tileDifference === -9 ||
+        tileDifference === -7 ||
+        tileDifference === 9 ||
+        tileDifference === 7
+      )
+        removeEnemyPiece = true;
+    } else if (turn === true) {
+      if (
+        (pieceOnTile === "1" && tileNumber === "5") ||
+        (pieceOnTile === "2" && tileNumber === "6") ||
+        (pieceOnTile === "2" && tileNumber === "5") ||
+        (pieceOnTile === "3" && tileNumber === "7") ||
+        (pieceOnTile === "3" && tileNumber === "6") ||
+        (pieceOnTile === "4" && tileNumber === "8") ||
+        (pieceOnTile === "4" && tileNumber === "7") ||
+        (pieceOnTile === "5" && tileNumber === "10") ||
+        (pieceOnTile === "5" && tileNumber === "9") ||
+        (pieceOnTile === "6" && tileNumber === "11") ||
+        (pieceOnTile === "6" && tileNumber === "10") ||
+        (pieceOnTile === "7" && tileNumber === "12") ||
+        (pieceOnTile === "7" && tileNumber === "11") ||
+        (pieceOnTile === "8" && tileNumber === "12") ||
+        (pieceOnTile === "9" && tileNumber === "13") ||
+        (pieceOnTile === "10" && tileNumber === "13") ||
+        (pieceOnTile === "10" && tileNumber === "14") ||
+        (pieceOnTile === "11" && tileNumber === "14") ||
+        (pieceOnTile === "11" && tileNumber === "15") ||
+        (pieceOnTile === "12" && tileNumber === "16") ||
+        (pieceOnTile === "12" && tileNumber === "15") ||
+        (pieceOnTile === "13" && tileNumber === "18") ||
+        (pieceOnTile === "13" && tileNumber === "17") ||
+        (pieceOnTile === "14" && tileNumber === "19") ||
+        (pieceOnTile === "14" && tileNumber === "18") ||
+        (pieceOnTile === "15" && tileNumber === "20") ||
+        (pieceOnTile === "15" && tileNumber === "19") ||
+        (pieceOnTile === "16" && tileNumber === "20") ||
+        (pieceOnTile === "17" && tileNumber === "22") ||
+        (pieceOnTile === "18" && tileNumber === "21") ||
+        (pieceOnTile === "18" && tileNumber === "22") ||
+        (pieceOnTile === "19" && tileNumber === "22") ||
+        (pieceOnTile === "19" && tileNumber === "23") ||
+        (pieceOnTile === "20" && tileNumber === "24") ||
+        (pieceOnTile === "21" && tileNumber === "26") ||
+        (pieceOnTile === "21" && tileNumber === "25") ||
+        (pieceOnTile === "22" && tileNumber === "27") ||
+        (pieceOnTile === "22" && tileNumber === "26") ||
+        (pieceOnTile === "23" && tileNumber === "28") ||
+        (pieceOnTile === "23" && tileNumber === "27") ||
+        (pieceOnTile === "24" && tileNumber === "28") ||
+        (pieceOnTile === "25" && tileNumber === "29") ||
+        (pieceOnTile === "26" && tileNumber === "29") ||
+        (pieceOnTile === "26" && tileNumber === "30") ||
+        (pieceOnTile === "27" && tileNumber === "30") ||
+        (pieceOnTile === "27" && tileNumber === "31") ||
+        (pieceOnTile === "28" && tileNumber === "31") ||
+        (pieceOnTile === "28" && tileNumber === "31")
+      ) {
+        p1ValidMove = true;
+        console.log("p1ValidMove = " + p1ValidMove);
+        if (
+          tileNumber == 29 ||
+          tileNumber == 30 ||
+          tileNumber == 31 ||
+          tileNumber == 32
+        ) {
+          isKing = true;
+        }
+      } else if (tileDifference === -9 || tileDifference === -7) {
+        removeEnemyPiece = true;
+        if (
+          tileNumber == 29 ||
+          tileNumber == 30 ||
+          tileNumber == 31 ||
+          tileNumber == 32
+        ) {
+          isKing = true;
+        }
+      } else {
+        p1ValidMove = false;
+      }
+    } else if (turn === false) {
+      if (
+        (pieceOnTile === "5" && tileNumber === "2") ||
+        (pieceOnTile === "5" && tileNumber === "1") ||
+        (pieceOnTile === "6" && tileNumber === "3") ||
+        (pieceOnTile === "6" && tileNumber === "2") ||
+        (pieceOnTile === "7" && tileNumber === "4") ||
+        (pieceOnTile === "7" && tileNumber === "3") ||
+        (pieceOnTile === "8" && tileNumber === "4") ||
+        (pieceOnTile === "9" && tileNumber === "5") ||
+        (pieceOnTile === "10" && tileNumber === "5") ||
+        (pieceOnTile === "10" && tileNumber === "6") ||
+        (pieceOnTile === "11" && tileNumber === "6") ||
+        (pieceOnTile === "11" && tileNumber === "7") ||
+        (pieceOnTile === "12" && tileNumber === "7") ||
+        (pieceOnTile === "12" && tileNumber === "8") ||
+        (pieceOnTile === "13" && tileNumber === "9") ||
+        (pieceOnTile === "13" && tileNumber === "10") ||
+        (pieceOnTile === "14" && tileNumber === "10") ||
+        (pieceOnTile === "14" && tileNumber === "11") ||
+        (pieceOnTile === "15" && tileNumber === "11") ||
+        (pieceOnTile === "15" && tileNumber === "12") ||
+        (pieceOnTile === "16" && tileNumber === "12") ||
+        (pieceOnTile === "17" && tileNumber === "13") ||
+        (pieceOnTile === "18" && tileNumber === "13") ||
+        (pieceOnTile === "18" && tileNumber === "14") ||
+        (pieceOnTile === "19" && tileNumber === "15") ||
+        (pieceOnTile === "19" && tileNumber === "14") ||
+        (pieceOnTile === "20" && tileNumber === "16") ||
+        (pieceOnTile === "20" && tileNumber === "15") ||
+        (pieceOnTile === "21" && tileNumber === "17") ||
+        (pieceOnTile === "21" && tileNumber === "18") ||
+        (pieceOnTile === "22" && tileNumber === "18") ||
+        (pieceOnTile === "22" && tileNumber === "19") ||
+        (pieceOnTile === "23" && tileNumber === "19") ||
+        (pieceOnTile === "23" && tileNumber === "20") ||
+        (pieceOnTile === "24" && tileNumber === "20") ||
+        (pieceOnTile === "25" && tileNumber === "21") ||
+        (pieceOnTile === "26" && tileNumber === "22") ||
+        (pieceOnTile === "26" && tileNumber === "21") ||
+        (pieceOnTile === "27" && tileNumber === "22") ||
+        (pieceOnTile === "27" && tileNumber === "23") ||
+        (pieceOnTile === "28" && tileNumber === "23") ||
+        (pieceOnTile === "28" && tileNumber === "24") ||
+        (pieceOnTile === "29" && tileNumber === "25") ||
+        (pieceOnTile === "29" && tileNumber === "26") ||
+        (pieceOnTile === "30" && tileNumber === "26") ||
+        (pieceOnTile === "30" && tileNumber === "27") ||
+        (pieceOnTile === "31" && tileNumber === "27") ||
+        (pieceOnTile === "31" && tileNumber === "28") ||
+        (pieceOnTile === "32" && tileNumber === "28")
+      ) {
+        p2ValidMove = true;
+        if (
+          tileNumber == 1 ||
+          tileNumber == 2 ||
+          tileNumber == 3 ||
+          tileNumber == 4
+        ) {
+          isKing = true;
+        }
+      } else if (tileDifference === 7 || tileDifference === 9) {
+        removeEnemyPiece = true;
+        if (
+          tileNumber == 1 ||
+          tileNumber == 2 ||
+          tileNumber == 3 ||
+          tileNumber == 4
+        ) {
+          isKing = true;
+        }
+      } else {
+        p1ValidMove = false;
+      }
+      //   } else if (
+      //         (turn === true && (tileDifference === -9 || tileDifference === -7)) ||
+      //         (turn === false && (tileDifference === 7 || tileDifference === 9))) {
+      //           removeEnemyPiece = true
+      //         //   p2ValidMove = false
+      //         //   p1ValidMove = false
+      //         //   console.log(tileDifference/2)
+      //           console.log('removeEnemyPiece = '+removeEnemyPiece)
+      //       } else {
+      //         removeEnemyPiece = false
     }
   }
-}
 
-function kingPieceDetermineIfEnemyPiece() {
-  console.log("icebox");
+  function p1ActionRemovePiece() {
+    currentPiece.removeAttribute("id");
+    currentPiece.classList.remove("p1-king");
+    clickedTile.firstElementChild.classList.add("p1-king");
+    clickedTile.firstElementChild.style.opacity = "1";    
+    changeScore();
+    enemyPieceGoneAction = true;
+    if (enemyTile.firstElementChild.classList.value === "p2-king"){
+      enemyTile.firstElementChild.classList.remove("p2-king")
+    } else if (enemyTile.firstElementChild.classList.value === "p2-piece"){
+      enemyTile.firstElementChild.classList.remove("p2-piece");
+    }
+  }
+
+  function p2ActionRemovePiece() {
+    currentPiece.removeAttribute("id");
+    currentPiece.classList.remove("p2-king");
+    clickedTile.firstElementChild.classList.add("p2-king");
+    clickedTile.firstElementChild.style.opacity = "1";    
+    changeScore();
+    enemyPieceGoneAction = true;
+    if (enemyTile.firstElementChild.classList.value === "p1-king"){
+      enemyTile.firstElementChild.classList.remove("p1-king")
+    } else if (enemyTile.firstElementChild.classList.value === "p1-piece"){
+      enemyTile.firstElementChild.classList.remove("p1-piece");
+    }
+  }
 }
 
 /*----- functions -----*/
@@ -372,26 +813,32 @@ function render() {
   p2PieceEl = document.querySelectorAll(".p2-piece");
   p1PieceEl.forEach((piece) => (piece.style.opacity = "1"));
   p2PieceEl.forEach((piece) => (piece.style.opacity = "1"));
-  p1ScoreEl.innerText = p1PieceEl.length;
-  p2ScoreEl.innerText = p2PieceEl.length;
+  p1KingEl.forEach((piece) => (piece.style.opacity = "1"));
+  p2KingEl.forEach((piece) => (piece.style.opacity = "1"));
+  p1ScoreEl.innerText = p1PieceEl.length * 1 + p1KingEl.length * 1;
+  p2ScoreEl.innerText = p2PieceEl.length * 1 + p2KingEl.length * 1;
   resetVariables();
   switchTurn();
-  continueGame()
+  continueGame();
 }
 
 function switchTurn() {
   if (turn === false) {
     p1DltHandlePieceEventListener();
+    dltKingP1AddHandlePieceEventListener;
     dltTileEventListener();
     p1TextEl.style.opacity = "0.3";
     p2TextEl.style.opacity = "1";
     p2AddHandlePieceEventListener();
+    kingP2AddHandlePieceEventListener;
   } else if (turn === true) {
     p2DltHandlePieceEventListener();
+    dltKingP2AddHandlePieceEventListener;
     dltTileEventListener();
     p1TextEl.style.opacity = "1";
     p2TextEl.style.opacity = "0.3";
     p1AddHandlePieceEventListener();
+    kingP1AddHandlePieceEventListener;
   }
 }
 
@@ -410,6 +857,7 @@ function resetVariables() {
   p2ValidMove = null;
   removeEnemyPiece = null;
   enemyPieceGoneAction = null;
+  isKing = null;
 }
 
 function chewyDialogue() {
@@ -417,167 +865,11 @@ function chewyDialogue() {
     chewyPhrases[Math.floor(Math.random() * chewyPhrases.length)];
 }
 
-function validMove() {
-  let tileDifference = pieceOnTile - tileNumber;
-  if (turn === true) {
-    if (
-      (pieceOnTile === "1" && tileNumber === "5") ||
-      (pieceOnTile === "2" && tileNumber === "6") ||
-      (pieceOnTile === "2" && tileNumber === "7") ||
-      (pieceOnTile === "3" && tileNumber === "7") ||
-      (pieceOnTile === "3" && tileNumber === "8") ||
-      (pieceOnTile === "4" && tileNumber === "8") ||
-      (pieceOnTile === "4" && tileNumber === "7") ||
-      (pieceOnTile === "5" && tileNumber === "10") ||
-      (pieceOnTile === "5" && tileNumber === "9") ||
-      (pieceOnTile === "6" && tileNumber === "11") ||
-      (pieceOnTile === "6" && tileNumber === "10") ||
-      (pieceOnTile === "7" && tileNumber === "12") ||
-      (pieceOnTile === "7" && tileNumber === "11") ||
-      (pieceOnTile === "8" && tileNumber === "12") ||
-      (pieceOnTile === "9" && tileNumber === "13") ||
-      (pieceOnTile === "10" && tileNumber === "13") ||
-      (pieceOnTile === "10" && tileNumber === "14") ||
-      (pieceOnTile === "11" && tileNumber === "14") ||
-      (pieceOnTile === "11" && tileNumber === "15") ||
-      (pieceOnTile === "12" && tileNumber === "16") ||
-      (pieceOnTile === "12" && tileNumber === "15") ||
-      (pieceOnTile === "13" && tileNumber === "18") ||
-      (pieceOnTile === "13" && tileNumber === "17") ||
-      (pieceOnTile === "14" && tileNumber === "19") ||
-      (pieceOnTile === "14" && tileNumber === "18") ||
-      (pieceOnTile === "15" && tileNumber === "20") ||
-      (pieceOnTile === "15" && tileNumber === "19") ||
-      (pieceOnTile === "16" && tileNumber === "20") ||
-      (pieceOnTile === "17" && tileNumber === "22") ||
-      (pieceOnTile === "17" && tileNumber === "21") ||
-      (pieceOnTile === "18" && tileNumber === "23") ||
-      (pieceOnTile === "18" && tileNumber === "22") ||
-      (pieceOnTile === "19" && tileNumber === "24") ||
-      (pieceOnTile === "19" && tileNumber === "23") ||
-      (pieceOnTile === "20" && tileNumber === "24") ||
-      (pieceOnTile === "21" && tileNumber === "26") ||
-      (pieceOnTile === "21" && tileNumber === "25") ||
-      (pieceOnTile === "22" && tileNumber === "27") ||
-      (pieceOnTile === "22" && tileNumber === "26") ||
-      (pieceOnTile === "23" && tileNumber === "28") ||
-      (pieceOnTile === "23" && tileNumber === "27") ||
-      (pieceOnTile === "24" && tileNumber === "28") ||
-      (pieceOnTile === "25" && tileNumber === "30") ||
-      (pieceOnTile === "25" && tileNumber === "29") ||
-      (pieceOnTile === "26" && tileNumber === "31") ||
-      (pieceOnTile === "26" && tileNumber === "30") ||
-      (pieceOnTile === "27" && tileNumber === "32") ||
-      (pieceOnTile === "27" && tileNumber === "31") ||
-      (pieceOnTile === "28" && tileNumber === "32")
-    ) {
-      p1ValidMove = true;
-      console.log("p1ValidMove = " + p1ValidMove);
-    } else if (tileDifference === -9 || tileDifference === -7) {
-      removeEnemyPiece = true;
-    } else {
-      p1ValidMove = false;
-    }
-  } else if (turn === false) {
-    if (
-      (pieceOnTile === "5" && tileNumber === "2") ||
-      (pieceOnTile === "5" && tileNumber === "1") ||
-      (pieceOnTile === "6" && tileNumber === "3") ||
-      (pieceOnTile === "6" && tileNumber === "2") ||
-      (pieceOnTile === "7" && tileNumber === "4") ||
-      (pieceOnTile === "7" && tileNumber === "3") ||
-      (pieceOnTile === "8" && tileNumber === "4") ||
-      (pieceOnTile === "9" && tileNumber === "5") ||
-      (pieceOnTile === "10" && tileNumber === "5") ||
-      (pieceOnTile === "10" && tileNumber === "6") ||
-      (pieceOnTile === "11" && tileNumber === "6") ||
-      (pieceOnTile === "11" && tileNumber === "7") ||
-      (pieceOnTile === "12" && tileNumber === "7") ||
-      (pieceOnTile === "12" && tileNumber === "8") ||
-      (pieceOnTile === "13" && tileNumber === "9") ||
-      (pieceOnTile === "13" && tileNumber === "10") ||
-      (pieceOnTile === "14" && tileNumber === "10") ||
-      (pieceOnTile === "14" && tileNumber === "11") ||
-      (pieceOnTile === "15" && tileNumber === "11") ||
-      (pieceOnTile === "15" && tileNumber === "12") ||
-      (pieceOnTile === "16" && tileNumber === "12") ||
-      (pieceOnTile === "17" && tileNumber === "13") ||
-      (pieceOnTile === "18" && tileNumber === "13") ||
-      (pieceOnTile === "18" && tileNumber === "14") ||
-      (pieceOnTile === "19" && tileNumber === "15") ||
-      (pieceOnTile === "19" && tileNumber === "14") ||
-      (pieceOnTile === "20" && tileNumber === "16") ||
-      (pieceOnTile === "20" && tileNumber === "15") ||
-      (pieceOnTile === "21" && tileNumber === "17") ||
-      (pieceOnTile === "21" && tileNumber === "18") ||
-      (pieceOnTile === "22" && tileNumber === "18") ||
-      (pieceOnTile === "22" && tileNumber === "19") ||
-      (pieceOnTile === "23" && tileNumber === "19") ||
-      (pieceOnTile === "23" && tileNumber === "20") ||
-      (pieceOnTile === "24" && tileNumber === "20") ||
-      (pieceOnTile === "25" && tileNumber === "21") ||
-      (pieceOnTile === "26" && tileNumber === "22") ||
-      (pieceOnTile === "26" && tileNumber === "21") ||
-      (pieceOnTile === "27" && tileNumber === "22") ||
-      (pieceOnTile === "27" && tileNumber === "23") ||
-      (pieceOnTile === "28" && tileNumber === "23") ||
-      (pieceOnTile === "28" && tileNumber === "24") ||
-      (pieceOnTile === "29" && tileNumber === "25") ||
-      (pieceOnTile === "29" && tileNumber === "26") ||
-      (pieceOnTile === "30" && tileNumber === "26") ||
-      (pieceOnTile === "30" && tileNumber === "27") ||
-      (pieceOnTile === "31" && tileNumber === "27") ||
-      (pieceOnTile === "31" && tileNumber === "28") ||
-      (pieceOnTile === "32" && tileNumber === "28")
-    ) {
-      p2ValidMove = true;
-    } else if (tileDifference === 7 || tileDifference === 9) {
-      removeEnemyPiece = true;
-      console.log("can move piece to a different of tiles 7-9");
-    } else {
-      p1ValidMove = false;
-      console.log("p2ValidMove = " + p2ValidMove);
-    }
-    //   } else if (
-    //         (turn === true && (tileDifference === -9 || tileDifference === -7)) ||
-    //         (turn === false && (tileDifference === 7 || tileDifference === 9))) {
-    //           removeEnemyPiece = true
-    //         //   p2ValidMove = false
-    //         //   p1ValidMove = false
-    //         //   console.log(tileDifference/2)
-    //           console.log('removeEnemyPiece = '+removeEnemyPiece)
-    //       } else {
-    //         removeEnemyPiece = false
-  }
-}
-
-// function countPieces(){
-//     for(let i=0; i<p1PieceEl.length-1; i++){
-//         console.log(p1PieceEl[i])
-//     }
-//     for(let j=0; j<p2PieceEl.length-1; j++){
-//         console.log(p2PieceEl[j])
-//     }
-// }
-// countPieces()
-// console.dir(p1PieceEl)
-
-// function render(){
-//     trn
-// }
-
-// function runGame(){
-//     if (continueGame()){
-
-//     }else{
-//         endGame()
-//     }
-// }
-
-// function changeTurn(){}
-
 function continueGame() {
-  if (p1PieceEl.length == 0 || p2PieceEl.length == 0) {
+  if (
+    (p1PieceEl.length == 0 && p1KingEl.length == 0) ||
+    (p2PieceEl.length == 0 && p2KingEl.length == 0)
+  ) {
     endGame();
   } else {
     console.log("next player");
@@ -585,12 +877,12 @@ function continueGame() {
 }
 
 function endGame() {
-    dltTileEventListener
-    p1DltHandlePieceEventListener
-    p2DltHandlePieceEventListener
-    if(p1PieceEl.length == 0){
-  chewyTextEl.innerContent = 'player 1 is win'
-    } else if (p2PieceEl.length == 0){
-        chewyTextEl.innerContent = 'player 2 is win'
-    }
+  dltTileEventListener;
+  p1DltHandlePieceEventListener;
+  p2DltHandlePieceEventListener;
+  if (p1PieceEl.length == 0 && p1KingEl.length == 0) {
+    chewyTextEl.innerContent = "player 1 is win";
+  } else if (p2PieceEl.length == 0 && p2KingEl.length == 0) {
+    chewyTextEl.innerContent = "player 2 is win";
+  }
 }
